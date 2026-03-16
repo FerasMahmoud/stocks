@@ -1,111 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Feras Capital — Stock & ETF Intelligence Dashboard</title>
-<meta name="description" content="Premium investment research dashboard with ETF analysis, portfolio simulator, and 5-year SAR projections.">
+<title>فراس كابيتال — لوحة تحليل الأسهم والصناديق</title>
+<meta name="description" content="لوحة استثمارية متقدمة لتحليل صناديق ETF والأسهم مع محاكي المحفظة وتوقعات 5 سنوات بالريال السعودي">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Playfair+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-primary: #06090f;
-  --bg-card: #0d1117;
-  --bg-card-alt: #111827;
-  --bg-surface: #161b22;
-  --border: #1e293b;
-  --border-strong: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-gold: #f59e0b;
-  --accent-gold-dim: rgba(245,158,11,0.15);
-  --accent-green: #10b981;
-  --accent-green-dim: rgba(16,185,129,0.1);
-  --accent-red: #ef4444;
-  --accent-red-dim: rgba(239,68,68,0.1);
-  --accent-blue: #3b82f6;
-  --accent-purple: #8b5cf6;
-  --accent-cyan: #06b6d4;
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'DM Sans', sans-serif;
+  --bg: #faf9f6;
+  --bg-card: #ffffff;
+  --bg-surface: #f3f1ed;
+  --bg-surface-alt: #eae7e0;
+  --border: #e2dfd8;
+  --border-strong: #ccc8be;
+  --text-primary: #1a1814;
+  --text-secondary: #5c564a;
+  --text-muted: #8a8478;
+  --accent: #b8860b;
+  --accent-hover: #9a7209;
+  --accent-dim: rgba(184,134,11,0.1);
+  --accent-green: #16a34a;
+  --accent-green-dim: rgba(22,163,74,0.08);
+  --accent-red: #dc2626;
+  --accent-red-dim: rgba(220,38,38,0.08);
+  --accent-blue: #2563eb;
+  --accent-purple: #7c3aed;
+  --accent-cyan: #0891b2;
+  --font-ar: 'Cairo', 'Tajawal', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --radius: 14px;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: var(--bg-primary);
+  background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-body);
-  line-height: 1.6;
+  font-family: var(--font-ar);
+  font-size: 16px;
+  line-height: 1.8;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Grain overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  opacity: 0.03;
-  pointer-events: none;
-  z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px;
-  animation: grain 0.5s steps(1) infinite;
-}
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-2%, -3%); }
-  30% { transform: translate(-1%, 4%); }
-  50% { transform: translate(-4%, 2%); }
-  70% { transform: translate(-3%, -2%); }
-  90% { transform: translate(-2%, 3%); }
-}
-
-/* Grid background */
-.grid-bg {
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(245,158,11,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,158,11,0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* Scroll progress */
 .scroll-progress {
   position: fixed;
   top: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));
-  transform-origin: left;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to left, var(--accent), var(--accent-green));
+  transform-origin: right;
   z-index: 10000;
   animation: scroll-track linear;
   animation-timeline: scroll(root block);
 }
-@keyframes scroll-track {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
+@keyframes scroll-track { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* Navigation */
+/* Nav */
 .nav {
   position: fixed;
-  top: 20px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(13,17,23,0.85);
+  background: rgba(250,249,246,0.88);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--border);
@@ -113,28 +76,24 @@ body::after {
   padding: 10px 28px;
   z-index: 1000;
   display: flex;
-  gap: 24px;
+  gap: 20px;
   align-items: center;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
 }
-
 .nav a {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: color 0.25s var(--ease-out);
+  font-weight: 600;
+  transition: color 0.25s;
   white-space: nowrap;
 }
-
-.nav a:hover { color: var(--accent-gold); }
-
+.nav a:hover { color: var(--accent); }
 .nav .logo {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--accent-gold);
-  letter-spacing: 1px;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: -0.5px;
 }
 
 /* Hero */
@@ -147,375 +106,265 @@ body::after {
   align-items: center;
   text-align: center;
   padding: 120px 24px 80px;
-  overflow: hidden;
 }
-
 .hero::before {
   content: '';
   position: absolute;
-  top: -300px;
+  top: -200px;
   left: 50%;
   transform: translateX(-50%);
-  width: 1000px;
-  height: 1000px;
-  background: radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 65%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 60%);
   pointer-events: none;
 }
-
 .hero-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px 20px;
-  background: var(--accent-gold-dim);
-  border: 1px solid rgba(245,158,11,0.25);
+  background: var(--accent-dim);
+  border: 1px solid rgba(184,134,11,0.2);
   border-radius: 100px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--accent-gold);
-  margin-bottom: 32px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin-bottom: 28px;
 }
-
 .hero-tag .pulse {
-  width: 6px;
-  height: 6px;
+  width: 7px; height: 7px;
   background: var(--accent-green);
   border-radius: 50%;
   animation: pulse 2s ease infinite;
 }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.5); }
-}
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(1.6); } }
 
 .hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(40px, 6vw, 80px);
+  font-size: clamp(36px, 6vw, 72px);
   font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  margin-bottom: 20px;
-  max-width: 900px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  max-width: 800px;
 }
-
 .hero h1 .gold {
-  background: linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b);
+  background: linear-gradient(135deg, #b8860b, #d4a017, #b8860b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
 .hero .subtitle {
   font-size: 18px;
   color: var(--text-secondary);
-  max-width: 560px;
-  margin: 0 auto 48px;
-  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto 44px;
+  line-height: 1.9;
 }
-
 .hero-stats {
   display: flex;
-  gap: 56px;
+  gap: 48px;
   flex-wrap: wrap;
   justify-content: center;
 }
-
-.hero-stat {
-  text-align: center;
-  position: relative;
-}
-
+.hero-stat { text-align: center; position: relative; }
 .hero-stat::after {
   content: '';
   position: absolute;
-  right: -28px;
+  left: -24px;
   top: 50%;
   transform: translateY(-50%);
   width: 1px;
-  height: 40px;
-  background: var(--border);
+  height: 36px;
+  background: var(--border-strong);
 }
-
 .hero-stat:last-child::after { display: none; }
-
 .hero-stat .value {
   font-family: var(--font-mono);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
-  color: var(--accent-gold);
-  line-height: 1.2;
+  color: var(--accent);
+  direction: ltr;
+  display: inline-block;
 }
-
 .hero-stat .value.green { color: var(--accent-green); }
-
 .hero-stat .label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  margin-top: 6px;
-}
-
-/* Section Styles */
-.section {
-  padding: 100px 24px;
-  max-width: 1300px;
-  margin: 0 auto;
-  position: relative;
-}
-
-.section-header {
-  margin-bottom: 56px;
-}
-
-.section-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent-gold);
-  margin-bottom: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Section */
+.section {
+  padding: 80px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
-
-.section-eyebrow::before {
+.section-eyebrow::after {
   content: '';
   width: 24px;
   height: 1px;
-  background: var(--accent-gold);
+  background: var(--accent);
 }
-
 .section-title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 4vw, 48px);
+  font-size: clamp(24px, 4vw, 42px);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
-
 .section-subtitle {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-secondary);
-  margin-top: 12px;
-  max-width: 600px;
+  margin-top: 10px;
+  max-width: 560px;
 }
+.section-header { margin-bottom: 40px; }
 
-/* Card System */
+/* Cards */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius);
   padding: 28px;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s var(--ease-out);
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-
 .card:hover {
   border-color: var(--border-strong);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.05);
 }
-
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(245,158,11,0.04), transparent 40%);
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.card:hover::before { opacity: 1; }
-
 .card-accent {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
+  top: 0; right: 0; left: 0;
+  height: 3px;
 }
 
-/* ETF Table */
-.etf-table-wrapper {
+/* Table */
+.table-wrap {
   overflow-x: auto;
-  border-radius: 16px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--bg-card);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.03);
 }
-
 .etf-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
-
-.etf-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
 .etf-table th {
   background: var(--bg-surface);
   padding: 14px 16px;
-  text-align: left;
-  font-family: var(--font-mono);
+  text-align: right;
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
-
 .etf-table td {
-  padding: 16px;
-  border-bottom: 1px solid rgba(30,41,59,0.5);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--bg-surface);
   vertical-align: middle;
 }
-
-.etf-table tbody tr {
-  transition: background 0.2s;
-}
-
-.etf-table tbody tr:hover {
-  background: rgba(245,158,11,0.03);
-}
-
+.etf-table tbody tr { transition: background 0.15s; }
+.etf-table tbody tr:hover { background: var(--accent-dim); }
 .etf-table .ticker {
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 15px;
-  color: var(--accent-gold);
+  color: var(--accent);
+  direction: ltr;
+  display: inline-block;
 }
-
-.etf-table .name {
-  color: var(--text-secondary);
-  font-size: 12px;
-  margin-top: 2px;
-}
-
-.etf-table .positive {
-  color: var(--accent-green);
-  font-family: var(--font-mono);
-  font-weight: 500;
-}
-
-.etf-table .negative {
-  color: var(--accent-red);
-  font-family: var(--font-mono);
-  font-weight: 500;
-}
-
-.etf-table .expense {
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-}
-
+.etf-table .name { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+.positive { color: var(--accent-green); font-family: var(--font-mono); font-weight: 500; direction: ltr; display: inline-block; }
+.negative { color: var(--accent-red); font-family: var(--font-mono); font-weight: 500; direction: ltr; display: inline-block; }
+.mono { font-family: var(--font-mono); color: var(--text-secondary); direction: ltr; display: inline-block; }
 .risk-badge {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 100px;
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 700;
 }
+.risk-low { background: var(--accent-green-dim); color: var(--accent-green); border: 1px solid rgba(22,163,74,0.15); }
+.risk-medium { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(184,134,11,0.15); }
+.risk-high { background: var(--accent-red-dim); color: var(--accent-red); border: 1px solid rgba(220,38,38,0.15); }
 
-.risk-low {
-  background: var(--accent-green-dim);
-  color: var(--accent-green);
-  border: 1px solid rgba(16,185,129,0.2);
-}
-
-.risk-medium {
-  background: rgba(245,158,11,0.1);
-  color: var(--accent-gold);
-  border: 1px solid rgba(245,158,11,0.2);
-}
-
-.risk-high {
-  background: var(--accent-red-dim);
-  color: var(--accent-red);
-  border: 1px solid rgba(239,68,68,0.2);
-}
-
-/* Bento Grid */
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 16px;
-}
-
+/* Bento */
+.bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
 .bento-wide { grid-column: span 8; }
 .bento-narrow { grid-column: span 4; }
-.bento-half { grid-column: span 6; }
-.bento-third { grid-column: span 4; }
-.bento-full { grid-column: span 12; }
+.chart-container { position: relative; height: 380px; }
+.chart-container canvas { width: 100% !important; height: 100% !important; }
 
-/* Chart containers */
-.chart-container {
-  position: relative;
-  height: 400px;
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-surface);
+  border-radius: 10px;
+  padding: 4px;
+  width: fit-content;
 }
-
-.chart-container canvas {
-  width: 100% !important;
-  height: 100% !important;
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
 }
+.tab-btn.active { background: var(--accent-dim); color: var(--accent); }
+.tab-btn:hover:not(.active) { color: var(--text-primary); }
 
 /* Simulator */
 .simulator {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 40px;
+  padding: 36px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
 }
-
-.simulator::before {
-  content: '';
+.simulator .card-accent {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));
+  top: 0; right: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(to left, var(--accent), var(--accent-green));
 }
-
 .sim-controls {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
 }
-
-.sim-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
+.sim-field { display: flex; flex-direction: column; gap: 6px; }
 .sim-field label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--text-muted);
 }
-
-.sim-field input,
-.sim-field select {
+.sim-field input, .sim-field select {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -526,469 +375,207 @@ body::after {
   font-weight: 500;
   outline: none;
   transition: border-color 0.25s;
+  direction: ltr;
+  text-align: right;
 }
+.sim-field input:focus, .sim-field select:focus { border-color: var(--accent); }
+.sim-field select option { background: var(--bg-card); }
 
-.sim-field input:focus,
-.sim-field select:focus {
-  border-color: var(--accent-gold);
+.btn-simulate {
+  background: linear-gradient(135deg, var(--accent), #9a7209);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-family: var(--font-ar);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-out), box-shadow 0.3s;
 }
-
-.sim-field select option {
-  background: var(--bg-card);
+.btn-simulate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(184,134,11,0.2);
 }
 
 .sim-results {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  margin-top: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 28px;
 }
-
 .sim-result-card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px;
+  padding: 18px;
   text-align: center;
 }
+.sim-result-card .year { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
+.sim-result-card .amount { font-family: var(--font-mono); font-size: 20px; font-weight: 600; color: var(--accent); direction: ltr; display: inline-block; }
+.sim-result-card .gain { font-family: var(--font-mono); font-size: 12px; color: var(--accent-green); margin-top: 4px; direction: ltr; display: inline-block; }
+.sim-result-card .dividend { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px; direction: ltr; display: inline-block; }
 
-.sim-result-card .year {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
-.sim-result-card .amount {
-  font-family: var(--font-mono);
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--accent-gold);
-}
-
-.sim-result-card .gain {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--accent-green);
-  margin-top: 4px;
-}
-
-.sim-result-card .dividend {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.btn-simulate {
-  background: linear-gradient(135deg, var(--accent-gold), #d97706);
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  padding: 14px 32px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: transform 0.2s var(--ease-spring), box-shadow 0.3s;
-}
-
-.btn-simulate:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(245,158,11,0.25);
-}
-
-/* Education Cards */
+/* Education */
 .edu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
 }
-
 .edu-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px;
-  transition: border-color 0.3s, transform 0.3s var(--ease-out);
-  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
   position: relative;
   overflow: hidden;
 }
-
 .edu-card:hover {
-  border-color: var(--accent-gold);
+  border-color: var(--accent);
   transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.06);
 }
-
-.edu-card .card-accent {
-  background: var(--accent-gold);
-}
-
-.edu-card .etf-ticker {
-  font-family: var(--font-mono);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--accent-gold);
-  margin-bottom: 4px;
-}
-
-.edu-card .etf-name {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-}
-
-.edu-card .etf-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
+.edu-card .card-accent { background: var(--accent); }
+.edu-card .etf-ticker { font-family: var(--font-mono); font-size: 20px; font-weight: 600; color: var(--accent); margin-bottom: 2px; direction: ltr; display: inline-block; }
+.edu-card .etf-name { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
+.edu-card .etf-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 14px; }
 .edu-card .etf-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding-top: 16px;
+  gap: 10px;
+  padding-top: 14px;
   border-top: 1px solid var(--border);
 }
+.edu-card .etf-stat-label { font-size: 10px; font-weight: 700; color: var(--text-muted); }
+.edu-card .etf-stat-value { font-family: var(--font-mono); font-size: 14px; font-weight: 600; margin-top: 2px; direction: ltr; display: inline-block; }
 
-.edu-card .etf-stat-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.edu-card .etf-stat-value {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 600;
-  margin-top: 4px;
-}
-
-/* Stock Ticker Row */
+/* Stocks */
 .stock-row {
   display: flex;
   align-items: center;
-  padding: 16px 20px;
+  padding: 14px 18px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
   margin-bottom: 8px;
-  transition: border-color 0.2s, background 0.2s;
-  gap: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  gap: 14px;
 }
+.stock-row:hover { border-color: var(--border-strong); box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.stock-rank { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); width: 28px; text-align: center; flex-shrink: 0; }
+.stock-info { flex: 1; min-width: 0; }
+.stock-ticker-name { font-family: var(--font-mono); font-weight: 600; font-size: 15px; direction: ltr; display: inline-block; }
+.stock-company { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+.stock-price { font-family: var(--font-mono); font-size: 15px; font-weight: 600; width: 80px; text-align: left; flex-shrink: 0; direction: ltr; }
+.stock-change { font-family: var(--font-mono); font-size: 13px; font-weight: 600; width: 70px; text-align: left; flex-shrink: 0; direction: ltr; }
+.stock-pe { font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); width: 60px; text-align: left; flex-shrink: 0; direction: ltr; }
+.stock-reason { font-size: 12px; color: var(--text-muted); width: 180px; flex-shrink: 0; }
 
-.stock-row:hover {
-  border-color: var(--border-strong);
-  background: var(--bg-card-alt);
-}
-
-.stock-rank {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-  width: 28px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.stock-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.stock-ticker-name {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--text-primary);
-}
-
-.stock-company {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.stock-price {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 600;
-  width: 80px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.stock-change {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  width: 70px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.stock-pe {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-secondary);
-  width: 60px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.stock-reason {
-  font-size: 12px;
-  color: var(--text-muted);
-  width: 200px;
-  flex-shrink: 0;
-}
-
-/* Portfolio Templates */
+/* Portfolio */
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 18px;
 }
-
 .portfolio-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px;
-  transition: transform 0.3s var(--ease-out), border-color 0.3s;
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: transform 0.3s var(--ease-out), border-color 0.3s, box-shadow 0.3s;
 }
-
-.portfolio-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent-gold);
-}
-
-.portfolio-card .pf-name {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.portfolio-card .pf-risk {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
-}
-
-.portfolio-card .pf-allocation {
-  margin-bottom: 16px;
-}
-
-.pf-alloc-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  font-size: 13px;
-}
-
-.pf-alloc-row .ticker {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  color: var(--accent-gold);
-}
-
-.pf-alloc-row .pct {
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-}
-
-.pf-bar {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--bg-surface);
-  margin-top: 2px;
-  overflow: hidden;
-}
-
-.pf-bar-fill {
-  height: 100%;
-  border-radius: 2px;
-  background: var(--accent-gold);
-}
-
-.pf-expected {
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-}
-
-.pf-expected .lbl {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.pf-expected .val {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  color: var(--accent-green);
-}
-
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--bg-surface);
-  border-radius: 10px;
-  padding: 4px;
-  margin-bottom: 24px;
-  width: fit-content;
-}
-
-.tab-btn {
-  background: none;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.5px;
-}
-
-.tab-btn.active {
-  background: var(--accent-gold-dim);
-  color: var(--accent-gold);
-}
-
-.tab-btn:hover:not(.active) {
-  color: var(--text-primary);
-}
-
-/* Divider */
-.divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
-  margin: 80px 0;
-}
+.portfolio-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 12px 32px rgba(0,0,0,0.06); }
+.portfolio-card .pf-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.portfolio-card .pf-risk { margin-bottom: 14px; }
+.pf-alloc-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
+.pf-alloc-row .ticker { font-family: var(--font-mono); font-weight: 500; color: var(--accent); direction: ltr; display: inline-block; }
+.pf-alloc-row .pct { font-family: var(--font-mono); color: var(--text-secondary); direction: ltr; display: inline-block; }
+.pf-bar { height: 4px; border-radius: 2px; background: var(--bg-surface-alt); margin-top: 2px; overflow: hidden; }
+.pf-bar-fill { height: 100%; border-radius: 2px; }
+.pf-expected { padding-top: 14px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+.pf-expected .lbl { font-size: 12px; color: var(--text-muted); }
+.pf-expected .val { font-family: var(--font-mono); font-weight: 600; color: var(--accent-green); direction: ltr; display: inline-block; }
 
 /* Marquee */
 .marquee-wrap {
   overflow: hidden;
-  padding: 16px 0;
+  padding: 14px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  margin: 60px 0;
+  background: var(--bg-surface);
 }
-
 .marquee-track {
   display: flex;
-  gap: 48px;
-  animation: marquee 40s linear infinite;
+  gap: 40px;
+  animation: marquee 45s linear infinite;
   white-space: nowrap;
+  direction: ltr;
 }
-
-.marquee-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-
+.marquee-item { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); flex-shrink: 0; }
 .marquee-item .m-ticker { color: var(--text-primary); font-weight: 600; }
 .marquee-item .m-positive { color: var(--accent-green); }
 .marquee-item .m-negative { color: var(--accent-red); }
 .marquee-item .m-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border-strong); }
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* Footer */
 .footer {
-  padding: 60px 24px;
+  padding: 50px 24px;
   text-align: center;
   border-top: 1px solid var(--border);
+  background: var(--bg-surface);
 }
+.footer p { font-size: 13px; color: var(--text-muted); }
+.footer .disclaimer { max-width: 650px; margin: 12px auto 0; font-size: 11px; line-height: 1.8; opacity: 0.7; }
 
-.footer p {
-  font-size: 13px;
-  color: var(--text-muted);
+/* Reveal animation — CSS only, no GSAP dependency */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
 }
-
-.footer .disclaimer {
-  max-width: 700px;
-  margin: 16px auto 0;
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.7;
-  opacity: 0.7;
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .bento-wide, .bento-narrow, .bento-half { grid-column: span 12; }
-  .bento-third { grid-column: span 6; }
+  .bento-wide, .bento-narrow { grid-column: span 12; }
   .stock-reason { display: none; }
 }
-
 @media (max-width: 768px) {
-  .nav { padding: 8px 16px; gap: 12px; }
+  .nav { padding: 8px 14px; gap: 10px; }
   .nav a { font-size: 11px; }
-  .hero-stats { gap: 32px; }
+  .hero-stats { gap: 28px; }
   .hero-stat::after { display: none; }
-  .bento-third { grid-column: span 12; }
-  .section { padding: 60px 16px; }
-  .simulator { padding: 24px; }
+  .section { padding: 50px 16px; }
+  .simulator { padding: 20px; }
   .stock-pe { display: none; }
   .edu-grid { grid-template-columns: 1fr; }
 }
-
 @media (max-width: 480px) {
-  .nav { gap: 8px; padding: 8px 12px; }
   .nav .hide-mobile { display: none; }
 }
-
-/* Animation classes */
-.reveal { opacity: 0; transform: translateY(40px); }
-.reveal.revealed { opacity: 1; transform: translateY(0); transition: all 0.7s var(--ease-out); }
 </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
 <div class="scroll-progress"></div>
 
-<!-- Navigation -->
+<!-- Nav -->
 <nav class="nav">
-  <span class="logo">FC</span>
-  <a href="#etfs">ETFs</a>
-  <a href="#stocks">Stocks</a>
-  <a href="#simulator" class="hide-mobile">Simulator</a>
-  <a href="#education" class="hide-mobile">Learn</a>
-  <a href="#portfolios">Portfolios</a>
+  <span class="logo">فراس كابيتال</span>
+  <a href="#etfs">الصناديق</a>
+  <a href="#stocks">الأسهم</a>
+  <a href="#simulator" class="hide-mobile">المحاكي</a>
+  <a href="#education" class="hide-mobile">تعلّم</a>
+  <a href="#portfolios">المحافظ</a>
 </nav>
 
-<!-- Ticker Marquee -->
-<div style="height: 80px;"></div>
+<!-- Marquee -->
+<div style="height:72px;"></div>
 <div class="marquee-wrap">
   <div class="marquee-track" id="marqueeTrack"></div>
 </div>
@@ -997,32 +584,29 @@ body::after {
 <section class="hero" id="hero">
   <div class="hero-tag">
     <span class="pulse"></span>
-    Investment Intelligence Dashboard
+    لوحة تحليل الاستثمار الذكي
   </div>
-  <h1>
-    Your <span class="gold">1M SAR</span><br>
-    Growth Engine
-  </h1>
+  <h1>محرك نمو<br><span class="gold">المليون ريال</span></h1>
   <p class="subtitle">
-    Research-backed ETF & stock analysis with interactive portfolio simulation.
-    Built for informed decisions, powered by real market data.
+    تحليل مبني على بيانات حقيقية لأفضل صناديق ETF والأسهم العالمية.
+    محاكي محفظة تفاعلي مع توقعات 5 سنوات بالريال السعودي.
   </p>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="value" data-counter="1000000" data-prefix="" data-suffix=" SAR">0</div>
-      <div class="label">Starting Capital</div>
+      <div class="value" data-counter="1000000" data-suffix=" SAR">0</div>
+      <div class="label">رأس المال</div>
     </div>
     <div class="hero-stat">
       <div class="value green" data-counter="10" data-suffix=" ETFs">0</div>
-      <div class="label">Analyzed</div>
+      <div class="label">صناديق محللة</div>
     </div>
     <div class="hero-stat">
-      <div class="value" data-counter="5" data-suffix=" Years">0</div>
-      <div class="label">Projection</div>
+      <div class="value" data-counter="5" data-suffix=" سنوات">0</div>
+      <div class="label">فترة التوقع</div>
     </div>
     <div class="hero-stat">
-      <div class="value green" data-counter="3.75" data-prefix="" data-suffix=" SAR/USD" data-decimal="true">0</div>
-      <div class="label">Exchange Rate</div>
+      <div class="value green" data-counter="3.75" data-suffix=" ر.س/دولار" data-decimal="true">0</div>
+      <div class="label">سعر الصرف</div>
     </div>
   </div>
 </section>
@@ -1030,23 +614,22 @@ body::after {
 <!-- Top 10 ETFs -->
 <section class="section" id="etfs">
   <div class="section-header reveal">
-    <div class="section-eyebrow">ETF Rankings</div>
-    <h2 class="section-title">Top 10 ETFs — Real Performance</h2>
-    <p class="section-subtitle">Live data from March 2026. Sorted by 5-year CAGR. All returns in USD.</p>
+    <div class="section-eyebrow">ترتيب الصناديق</div>
+    <h2 class="section-title">أفضل 10 صناديق ETF — أداء حقيقي</h2>
+    <p class="section-subtitle">بيانات مارس 2026. مرتبة حسب العائد السنوي المركب لـ 5 سنوات. جميع العوائد بالدولار.</p>
   </div>
-
-  <div class="etf-table-wrapper reveal">
+  <div class="table-wrap reveal">
     <table class="etf-table">
       <thead>
         <tr>
           <th>#</th>
-          <th>ETF</th>
-          <th>Category</th>
-          <th>Expense</th>
-          <th>Yield</th>
-          <th>1Y Return</th>
-          <th>5Y CAGR</th>
-          <th>Risk</th>
+          <th>الصندوق</th>
+          <th>الفئة</th>
+          <th>الرسوم</th>
+          <th>العائد</th>
+          <th>عائد سنة</th>
+          <th>CAGR 5 سنوات</th>
+          <th>المخاطرة</th>
         </tr>
       </thead>
       <tbody id="etfTableBody"></tbody>
@@ -1054,122 +637,114 @@ body::after {
   </div>
 </section>
 
-<!-- Performance Chart -->
+<!-- Charts -->
 <section class="section">
   <div class="bento-grid">
     <div class="bento-wide card reveal">
-      <div class="card-accent" style="background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div class="card-accent" style="background:linear-gradient(to left, var(--accent), var(--accent-green));"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
         <div>
-          <div class="section-eyebrow" style="margin-bottom:4px;">Comparative Analysis</div>
-          <h3 style="font-family:var(--font-display);font-size:22px;font-weight:700;">5-Year CAGR Comparison</h3>
+          <div class="section-eyebrow" style="margin-bottom:4px;">تحليل مقارن</div>
+          <h3 style="font-size:20px;font-weight:800;">مقارنة العائد السنوي المركب</h3>
         </div>
         <div class="tabs">
           <button class="tab-btn active" onclick="switchChart('cagr')">CAGR</button>
-          <button class="tab-btn" onclick="switchChart('return1y')">1Y Return</button>
-          <button class="tab-btn" onclick="switchChart('yield')">Yield</button>
+          <button class="tab-btn" onclick="switchChart('return1y')">عائد سنة</button>
+          <button class="tab-btn" onclick="switchChart('yield')">توزيعات</button>
         </div>
       </div>
-      <div class="chart-container">
-        <canvas id="etfCompareChart"></canvas>
-      </div>
+      <div class="chart-container"><canvas id="etfCompareChart"></canvas></div>
     </div>
     <div class="bento-narrow card reveal" style="display:flex;flex-direction:column;justify-content:space-between;">
       <div>
-        <div class="section-eyebrow" style="margin-bottom:8px;">Quick Stats</div>
-        <h3 style="font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:24px;">At a Glance</h3>
+        <div class="section-eyebrow" style="margin-bottom:6px;">نظرة سريعة</div>
+        <h3 style="font-size:18px;font-weight:800;margin-bottom:20px;">إحصائيات مختصرة</h3>
       </div>
-      <div id="quickStats" style="display:flex;flex-direction:column;gap:16px;"></div>
+      <div id="quickStats" style="display:flex;flex-direction:column;gap:12px;"></div>
     </div>
   </div>
 </section>
 
-<!-- Growth Projection Chart -->
+<!-- Growth Projection -->
 <section class="section">
   <div class="card reveal">
-    <div class="card-accent" style="background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div class="section-eyebrow" style="margin-bottom:4px;">Wealth Projection</div>
-        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:700;">1,000,000 SAR — 5 Year Growth</h3>
-      </div>
+    <div class="card-accent" style="background:linear-gradient(to left, var(--accent-green), var(--accent-cyan));"></div>
+    <div style="margin-bottom:18px;">
+      <div class="section-eyebrow" style="margin-bottom:4px;">توقعات النمو</div>
+      <h3 style="font-size:20px;font-weight:800;">1,000,000 ريال — نمو 5 سنوات</h3>
     </div>
-    <div class="chart-container" style="height:350px;">
-      <canvas id="growthChart"></canvas>
-    </div>
+    <div class="chart-container" style="height:320px;"><canvas id="growthChart"></canvas></div>
   </div>
 </section>
 
 <!-- Top 10 Stocks -->
 <section class="section" id="stocks">
   <div class="section-header reveal">
-    <div class="section-eyebrow">Stock Rankings</div>
-    <h2 class="section-title">Top 10 Stocks — 2025/2026</h2>
-    <p class="section-subtitle">Best performing major stocks. Prices in USD, returns trailing 1 year.</p>
+    <div class="section-eyebrow">ترتيب الأسهم</div>
+    <h2 class="section-title">أفضل 10 أسهم — 2025/2026</h2>
+    <p class="section-subtitle">أفضل الأسهم أداءً. الأسعار بالدولار، العوائد لآخر 12 شهر.</p>
   </div>
   <div id="stockList" class="reveal"></div>
 </section>
 
-<!-- Portfolio Simulator -->
+<!-- Simulator -->
 <section class="section" id="simulator">
   <div class="section-header reveal">
-    <div class="section-eyebrow">Interactive Tool</div>
-    <h2 class="section-title">Portfolio Simulator</h2>
-    <p class="section-subtitle">Model your investment growth with custom parameters. All projections use compound interest.</p>
+    <div class="section-eyebrow">أداة تفاعلية</div>
+    <h2 class="section-title">محاكي المحفظة الاستثمارية</h2>
+    <p class="section-subtitle">اختبر نمو استثمارك بمعطيات مختلفة. جميع التوقعات تستخدم الفائدة المركبة.</p>
   </div>
-
   <div class="simulator reveal">
+    <div class="card-accent"></div>
     <div class="sim-controls">
       <div class="sim-field">
-        <label>Initial Investment (SAR)</label>
+        <label>المبلغ الأولي (ريال)</label>
         <input type="number" id="simAmount" value="1000000" min="1000" step="1000">
       </div>
       <div class="sim-field">
-        <label>Monthly Contribution (SAR)</label>
+        <label>إضافة شهرية (ريال)</label>
         <input type="number" id="simMonthly" value="5000" min="0" step="500">
       </div>
       <div class="sim-field">
-        <label>Expected Annual Return (%)</label>
+        <label>العائد السنوي المتوقع (%)</label>
         <input type="number" id="simReturn" value="10" min="1" max="30" step="0.5">
       </div>
       <div class="sim-field">
-        <label>Dividend Yield (%)</label>
+        <label>عائد التوزيعات (%)</label>
         <input type="number" id="simDividend" value="1.5" min="0" max="10" step="0.1">
       </div>
       <div class="sim-field">
-        <label>Projection Years</label>
+        <label>سنوات التوقع</label>
         <input type="number" id="simYears" value="5" min="1" max="30" step="1">
       </div>
       <div class="sim-field">
-        <label>Strategy</label>
+        <label>الاستراتيجية</label>
         <select id="simStrategy">
-          <option value="aggressive">Aggressive Growth (QQQ/VUG)</option>
-          <option value="balanced" selected>Balanced (VOO/VTI)</option>
-          <option value="conservative">Conservative (BND/SCHD)</option>
-          <option value="income">Income Focus (SCHD/VIG)</option>
-          <option value="custom">Custom Return Rate</option>
+          <option value="aggressive">نمو قوي (QQQ/VUG)</option>
+          <option value="balanced" selected>متوازن (VOO/VTI)</option>
+          <option value="conservative">محافظ (BND/SCHD)</option>
+          <option value="income">دخل ثابت (SCHD/VIG)</option>
+          <option value="custom">عائد مخصص</option>
         </select>
       </div>
     </div>
     <button class="btn-simulate" onclick="runSimulation()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      Run Simulation
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      شغّل المحاكاة
     </button>
     <div id="simResults" class="sim-results"></div>
-    <div style="margin-top:24px;">
-      <div class="chart-container" style="height:300px;">
-        <canvas id="simChart"></canvas>
-      </div>
+    <div style="margin-top:20px;">
+      <div class="chart-container" style="height:280px;"><canvas id="simChart"></canvas></div>
     </div>
   </div>
 </section>
 
-<!-- ETF Education -->
+<!-- Education -->
 <section class="section" id="education">
   <div class="section-header reveal">
-    <div class="section-eyebrow">Learn & Understand</div>
-    <h2 class="section-title">ETF Deep Dive</h2>
-    <p class="section-subtitle">Understanding what each ETF does and who should invest in it.</p>
+    <div class="section-eyebrow">تعلّم وافهم</div>
+    <h2 class="section-title">دليل صناديق ETF</h2>
+    <p class="section-subtitle">شرح مفصّل لكل صندوق ومين يناسبه.</p>
   </div>
   <div class="edu-grid" id="eduGrid"></div>
 </section>
@@ -1177,19 +752,19 @@ body::after {
 <!-- Saudi Market -->
 <section class="section" id="saudi">
   <div class="section-header reveal">
-    <div class="section-eyebrow">Tadawul / TASI</div>
-    <h2 class="section-title">Saudi Market Highlights</h2>
-    <p class="section-subtitle">Top Saudi stocks available on Tadawul. Prices in SAR.</p>
+    <div class="section-eyebrow">السوق السعودي</div>
+    <h2 class="section-title">تداول — أبرز الأسهم</h2>
+    <p class="section-subtitle">أفضل أسهم السوق السعودي. الأسعار بالريال.</p>
   </div>
   <div id="saudiList" class="reveal"></div>
 </section>
 
-<!-- Portfolio Templates -->
+<!-- Portfolios -->
 <section class="section" id="portfolios">
   <div class="section-header reveal">
-    <div class="section-eyebrow">Ready-Made Strategies</div>
-    <h2 class="section-title">Portfolio Templates</h2>
-    <p class="section-subtitle">Pre-built allocation strategies for 1,000,000 SAR. Pick one that matches your risk tolerance.</p>
+    <div class="section-eyebrow">استراتيجيات جاهزة</div>
+    <h2 class="section-title">قوالب المحافظ</h2>
+    <p class="section-subtitle">توزيعات محافظ جاهزة لمليون ريال. اختر اللي يناسب مستوى مخاطرتك.</p>
   </div>
   <div class="portfolio-grid" id="portfolioGrid"></div>
 </section>
@@ -1197,22 +772,22 @@ body::after {
 <!-- Brokers -->
 <section class="section" id="brokers">
   <div class="section-header reveal">
-    <div class="section-eyebrow">Access</div>
-    <h2 class="section-title">Best Brokers for Saudi Investors</h2>
-    <p class="section-subtitle">How to access US ETFs and global markets from Saudi Arabia.</p>
+    <div class="section-eyebrow">الوصول للأسواق</div>
+    <h2 class="section-title">أفضل شركات الوساطة</h2>
+    <p class="section-subtitle">كيف توصل لصناديق ETF الأمريكية والأسواق العالمية من السعودية.</p>
   </div>
-  <div class="edu-grid reveal" id="brokerGrid"></div>
+  <div class="edu-grid" id="brokerGrid"></div>
 </section>
 
 <!-- Footer -->
 <footer class="footer">
-  <p style="font-family:var(--font-mono);color:var(--accent-gold);font-size:14px;font-weight:600;letter-spacing:2px;margin-bottom:8px;">FERAS CAPITAL</p>
-  <p>Investment Intelligence Dashboard &mdash; Built March 2026</p>
+  <p style="color:var(--accent);font-size:15px;font-weight:800;margin-bottom:6px;">فراس كابيتال</p>
+  <p>لوحة تحليل الاستثمار الذكي — مارس 2026</p>
   <p class="disclaimer">
-    This dashboard is for educational and informational purposes only. It does not constitute financial advice.
-    Past performance does not guarantee future results. All projections are estimates based on historical data.
-    Consult a licensed financial advisor before making investment decisions.
-    Exchange rate: 1 USD = 3.75 SAR (pegged). Data sourced from public financial databases.
+    هذه اللوحة للأغراض التعليمية والمعلوماتية فقط ولا تُعد نصيحة مالية.
+    الأداء السابق لا يضمن النتائج المستقبلية. جميع التوقعات تقديرية بناءً على بيانات تاريخية.
+    استشر مستشاراً مالياً مرخصاً قبل اتخاذ قرارات استثمارية.
+    سعر الصرف: 1 دولار = 3.75 ريال سعودي (مربوط).
   </p>
 </footer>
 
@@ -1221,172 +796,124 @@ body::after {
 // DATA
 // ============================================================
 const ETF_DATA = [
-  { ticker: 'QQQ', name: 'Invesco QQQ (NASDAQ-100)', category: 'NASDAQ-100', expense: '0.18%', yield: '0.46%', return1y: 26.11, cagr5y: 14.23, risk: 'Med-High', color: '#8b5cf6', desc: 'Tracks the 100 largest non-financial NASDAQ companies. Heavy tech exposure — Apple, Microsoft, NVIDIA, Amazon, Meta. Best for growth-oriented investors who believe in tech dominance.', who: 'Growth investors, tech believers, long-term holders', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
-  { ticker: 'VUG', name: 'Vanguard Growth ETF', category: 'US Growth', expense: '0.03%', yield: '0.44%', return1y: 21.23, cagr5y: 12.76, risk: 'Med-High', color: '#06b6d4', desc: 'Broad US growth stocks at rock-bottom cost. Similar to QQQ but wider — includes growth stocks from all sectors, not just NASDAQ. Ultra-low 0.03% expense ratio.', who: 'Cost-conscious growth investors', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
-  { ticker: 'VOO', name: 'Vanguard S&P 500 ETF', category: 'S&P 500', expense: '0.03%', yield: '1.15%', return1y: 20.57, cagr5y: 12.69, risk: 'Medium', color: '#f59e0b', desc: 'The gold standard. Tracks the 500 largest US companies. Instant diversification across all sectors. Warren Buffett recommends this for most investors.', who: 'Everyone — the default choice for any portfolio', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
-  { ticker: 'VTI', name: 'Vanguard Total Market ETF', category: 'Total US', expense: '0.03%', yield: '1.14%', return1y: 20.31, cagr5y: 11.09, risk: 'Medium', color: '#3b82f6', desc: 'The entire US stock market in one ETF — 4,000+ stocks including small and mid-caps that VOO misses. Slightly more diversified than VOO.', who: 'Set-and-forget investors, total market believers', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
-  { ticker: 'VIG', name: 'Vanguard Dividend Appreciation', category: 'Div Growth', expense: '0.04%', yield: '1.62%', return1y: 15.55, cagr5y: 10.58, risk: 'Low-Med', color: '#14b8a6', desc: 'Companies that have increased dividends for 10+ consecutive years. Quality-focused — companies with strong cash flow and discipline. Lower volatility than broad market.', who: 'Quality seekers, dividend growth investors', topHoldings: 'AAPL, MSFT, JPM, UNH, XOM' },
-  { ticker: 'SCHD', name: 'Schwab US Dividend Equity', category: 'US Dividend', expense: '0.06%', yield: '3.39%', return1y: 16.26, cagr5y: 8.79, risk: 'Low-Med', color: '#10b981', desc: 'High-quality dividend stocks selected by fundamental metrics. 3.4% yield — pays ~33,900 SAR/year per million invested. The income investor favorite.', who: 'Income seekers, retirees, dividend investors', topHoldings: 'ABBV, KO, PEP, CSCO, PFE' },
-  { ticker: 'VXUS', name: 'Vanguard Total International', category: 'International', expense: '0.05%', yield: '3.06%', return1y: 27.48, cagr5y: 7.74, risk: 'Med-High', color: '#ec4899', desc: 'Every stock market outside the US — Europe, Asia, emerging markets. Essential for geographic diversification. Outperformed US in 2025-2026 cycle.', who: 'Diversification seekers, global investors', topHoldings: 'TSM, Novo Nordisk, Samsung, Nestle' },
-  { ticker: 'VNQ', name: 'Vanguard Real Estate ETF', category: 'US REITs', expense: '0.13%', yield: '3.72%', return1y: 7.34, cagr5y: 3.82, risk: 'Med-High', color: '#f97316', desc: 'Real estate investment trusts — earn rental income without owning property. 3.7% dividend yield. Sensitive to interest rates. Good inflation hedge long-term.', who: 'Income seekers, real estate exposure without buying property', topHoldings: 'Prologis, AMT, Equinix, Realty Income' },
-  { ticker: 'BND', name: 'Vanguard Total Bond Market', category: 'US Bonds', expense: '0.03%', yield: '3.90%', return1y: 5.18, cagr5y: 3.44, risk: 'Low', color: '#64748b', desc: 'US government and investment-grade corporate bonds. The safety net of any portfolio. Low returns but low risk. Essential during market crashes.', who: 'Conservative investors, portfolio stabilizers, near-retirement', topHoldings: 'US Treasury bonds, mortgage-backed securities' },
-  { ticker: 'ARKK', name: 'ARK Innovation ETF', category: 'Innovation', expense: '0.75%', yield: '0.00%', return1y: 46.96, cagr5y: -10.63, risk: 'Very High', color: '#ef4444', desc: 'Cathie Wood\'s actively managed disruptive innovation fund. Tesla, Roku, Coinbase. Extremely volatile — can gain 100% or lose 75% in a year. High risk, high reward.', who: 'Speculative investors, high risk tolerance, small allocation only', topHoldings: 'TSLA, ROKU, COIN, RKLB, SQ' },
+  { ticker: 'QQQ', name: 'Invesco QQQ (ناسداك-100)', nameEn: 'Invesco QQQ Trust', category: 'ناسداك-100', expense: '0.18%', yield: '0.46%', return1y: 26.11, cagr5y: 14.23, risk: 'متوسط-عالي', riskEn: 'Med-High', color: '#7c3aed', desc: 'يتتبع أكبر 100 شركة غير مالية في ناسداك. تركيز كبير على التقنية — أبل، مايكروسوفت، إنفيديا، أمازون، ميتا. الأفضل للمستثمرين الباحثين عن نمو قوي.', who: 'مستثمري النمو، المؤمنين بالتقنية', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
+  { ticker: 'VUG', name: 'Vanguard Growth ETF', nameEn: 'Vanguard Growth ETF', category: 'نمو أمريكي', expense: '0.03%', yield: '0.44%', return1y: 21.23, cagr5y: 12.76, risk: 'متوسط-عالي', riskEn: 'Med-High', color: '#0891b2', desc: 'أسهم نمو أمريكية واسعة بتكلفة منخفضة جداً. مشابه لـ QQQ لكن أوسع — يشمل أسهم نمو من جميع القطاعات. رسوم 0.03% فقط.', who: 'مستثمري النمو الحريصين على التكلفة', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
+  { ticker: 'VOO', name: 'Vanguard S&P 500 ETF', nameEn: 'Vanguard S&P 500', category: 'S&P 500', expense: '0.03%', yield: '1.15%', return1y: 20.57, cagr5y: 12.69, risk: 'متوسط', riskEn: 'Medium', color: '#b8860b', desc: 'المعيار الذهبي. يتتبع أكبر 500 شركة أمريكية. تنويع فوري عبر جميع القطاعات. وارن بافت ينصح به لأغلب المستثمرين.', who: 'الجميع — الخيار الافتراضي لأي محفظة', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
+  { ticker: 'VTI', name: 'Vanguard Total Market', nameEn: 'Vanguard Total Stock Market', category: 'السوق الأمريكي الكامل', expense: '0.03%', yield: '1.14%', return1y: 20.31, cagr5y: 11.09, risk: 'متوسط', riskEn: 'Medium', color: '#2563eb', desc: 'كل السوق الأمريكي في صندوق واحد — أكثر من 4,000 سهم بما فيها الشركات الصغيرة والمتوسطة اللي ما يغطيها VOO.', who: 'المستثمر طويل المدى الباحث عن تنويع كامل', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
+  { ticker: 'VIG', name: 'Vanguard Dividend Appreciation', nameEn: 'Vanguard Dividend Appreciation', category: 'نمو التوزيعات', expense: '0.04%', yield: '1.62%', return1y: 15.55, cagr5y: 10.58, risk: 'منخفض-متوسط', riskEn: 'Low-Med', color: '#0d9488', desc: 'شركات زادت توزيعاتها لأكثر من 10 سنوات متتالية. يركز على الجودة — شركات بتدفقات نقدية قوية. تقلبات أقل من السوق العام.', who: 'الباحثين عن الجودة ونمو التوزيعات', topHoldings: 'AAPL, MSFT, JPM, UNH, XOM' },
+  { ticker: 'SCHD', name: 'Schwab US Dividend Equity', nameEn: 'Schwab US Dividend Equity', category: 'توزيعات أمريكية', expense: '0.06%', yield: '3.39%', return1y: 16.26, cagr5y: 8.79, risk: 'منخفض-متوسط', riskEn: 'Low-Med', color: '#16a34a', desc: 'أسهم توزيعات عالية الجودة. عائد 3.4% — يدفع حوالي 33,900 ريال سنوياً لكل مليون مستثمر. المفضل لمستثمري الدخل.', who: 'الباحثين عن دخل ثابت، المتقاعدين', topHoldings: 'ABBV, KO, PEP, CSCO, PFE' },
+  { ticker: 'VXUS', name: 'Vanguard Total International', nameEn: 'Vanguard Total Intl Stock', category: 'دولي', expense: '0.05%', yield: '3.06%', return1y: 27.48, cagr5y: 7.74, risk: 'متوسط-عالي', riskEn: 'Med-High', color: '#db2777', desc: 'كل أسواق الأسهم خارج أمريكا — أوروبا، آسيا، الأسواق الناشئة. أساسي للتنويع الجغرافي. تفوق على السوق الأمريكي في 2025-2026.', who: 'الباحثين عن التنويع الجغرافي', topHoldings: 'TSM, Novo Nordisk, Samsung, Nestle' },
+  { ticker: 'VNQ', name: 'Vanguard Real Estate ETF', nameEn: 'Vanguard Real Estate', category: 'عقارات', expense: '0.13%', yield: '3.72%', return1y: 7.34, cagr5y: 3.82, risk: 'متوسط-عالي', riskEn: 'Med-High', color: '#ea580c', desc: 'صناديق عقارية — تحصل على دخل إيجاري بدون شراء عقار. عائد توزيعات 3.7%. حساس لأسعار الفائدة. حماية جيدة من التضخم على المدى الطويل.', who: 'الباحثين عن دخل وتنويع بالعقار', topHoldings: 'Prologis, AMT, Equinix, Realty Income' },
+  { ticker: 'BND', name: 'Vanguard Total Bond Market', nameEn: 'Vanguard Total Bond Market', category: 'سندات', expense: '0.03%', yield: '3.90%', return1y: 5.18, cagr5y: 3.44, risk: 'منخفض', riskEn: 'Low', color: '#64748b', desc: 'سندات حكومية وشركات أمريكية. شبكة الأمان في أي محفظة. عوائد منخفضة لكن مخاطر منخفضة. أساسي وقت انهيارات السوق.', who: 'المستثمرين المحافظين، قريبي التقاعد', topHoldings: 'سندات خزانة أمريكية' },
+  { ticker: 'ARKK', name: 'ARK Innovation ETF', nameEn: 'ARK Innovation ETF', category: 'ابتكار', expense: '0.75%', yield: '0.00%', return1y: 46.96, cagr5y: -10.63, risk: 'عالي جداً', riskEn: 'Very High', color: '#dc2626', desc: 'صندوق كاثي وود للابتكار. تسلا، كوين بيس. متقلب جداً — ممكن يربح 100% أو يخسر 75% في سنة. مخاطر عالية، عوائد محتملة عالية.', who: 'المضاربين، تحمّل مخاطر عالي، نسبة صغيرة فقط', topHoldings: 'TSLA, ROKU, COIN, RKLB, SQ' },
 ];
 
 const STOCK_DATA = [
-  { ticker: 'PLTR', company: 'Palantir Technologies', price: 153, return1y: 131, pe: 239.6, reason: 'Operational AI platform leader' },
-  { ticker: 'GOOGL', company: 'Alphabet (Google)', price: 305, return1y: 84.6, pe: 28.0, reason: 'AI integration + search dominance' },
-  { ticker: 'AVGO', company: 'Broadcom Inc.', price: 327, return1y: 67, pe: 62.8, reason: 'AI semiconductor surge' },
-  { ticker: 'TSLA', company: 'Tesla Inc.', price: 397, return1y: 59, pe: 393.8, reason: 'Autonomous driving narrative' },
-  { ticker: 'NVDA', company: 'NVIDIA Corporation', price: 184, return1y: 51, pe: 36.8, reason: 'AI chip market dominance' },
-  { ticker: 'AAPL', company: 'Apple Inc.', price: 253, return1y: 18, pe: 31.7, reason: 'Services growth + Apple Intelligence' },
-  { ticker: 'LLY', company: 'Eli Lilly', price: 984, return1y: 15, pe: 42.9, reason: 'GLP-1 drug revenue +44.7%' },
-  { ticker: 'AMZN', company: 'Amazon.com', price: 212, return1y: 7, pe: 29.0, reason: 'AWS cloud + advertising growth' },
-  { ticker: 'META', company: 'Meta Platforms', price: 628, return1y: 3, pe: 26.1, reason: 'AI-powered ad engine + Threads' },
-  { ticker: 'MSFT', company: 'Microsoft', price: 400, return1y: 3, pe: 24.8, reason: 'Azure + Copilot AI enterprise' },
+  { ticker: 'PLTR', company: 'بالانتير تكنولوجيز', price: 153, return1y: 131, pe: 239.6, reason: 'منصة ذكاء اصطناعي عمليّة' },
+  { ticker: 'GOOGL', company: 'ألفابت (جوجل)', price: 305, return1y: 84.6, pe: 28.0, reason: 'دمج الذكاء الاصطناعي + هيمنة البحث' },
+  { ticker: 'AVGO', company: 'برودكوم', price: 327, return1y: 67, pe: 62.8, reason: 'طفرة رقائق الذكاء الاصطناعي' },
+  { ticker: 'TSLA', company: 'تسلا', price: 397, return1y: 59, pe: 393.8, reason: 'القيادة الذاتية' },
+  { ticker: 'NVDA', company: 'إنفيديا', price: 184, return1y: 51, pe: 36.8, reason: 'هيمنة سوق رقائق AI' },
+  { ticker: 'AAPL', company: 'أبل', price: 253, return1y: 18, pe: 31.7, reason: 'نمو الخدمات + Apple Intelligence' },
+  { ticker: 'LLY', company: 'إيلي ليلي', price: 984, return1y: 15, pe: 42.9, reason: 'إيرادات أدوية GLP-1 بنمو 44.7%' },
+  { ticker: 'AMZN', company: 'أمازون', price: 212, return1y: 7, pe: 29.0, reason: 'AWS السحابي + نمو الإعلانات' },
+  { ticker: 'META', company: 'ميتا (فيسبوك)', price: 628, return1y: 3, pe: 26.1, reason: 'محرك إعلانات AI + ثريدز' },
+  { ticker: 'MSFT', company: 'مايكروسوفت', price: 400, return1y: 3, pe: 24.8, reason: 'Azure + Copilot AI للمؤسسات' },
 ];
 
 const SAUDI_STOCKS = [
-  { ticker: '2222.SR', name: 'Saudi Aramco', price: '28.50 SAR', sector: 'Energy' },
-  { ticker: '1180.SR', name: 'Al Rajhi Bank', price: '105.00 SAR', sector: 'Banking' },
-  { ticker: '2010.SR', name: 'STC (Saudi Telecom)', price: '55.20 SAR', sector: 'Telecom' },
-  { ticker: '1010.SR', name: 'SABIC', price: '68.90 SAR', sector: 'Chemicals' },
-  { ticker: '2350.SR', name: 'Saudi Kayan', price: '12.50 SAR', sector: 'Petrochemicals' },
-  { ticker: '1120.SR', name: 'Al Rajhi REIT', price: '8.50 SAR', sector: 'REITs' },
-  { ticker: '9010.SR', name: 'Falcom Saudi Equity ETF', price: '42.30 SAR', sector: 'ETF' },
-  { ticker: '9020.SR', name: 'HSBC Saudi 20 ETF', price: '38.70 SAR', sector: 'ETF' },
+  { ticker: '2222.SR', name: 'أرامكو السعودية', price: '28.50 ر.س', sector: 'طاقة' },
+  { ticker: '1180.SR', name: 'بنك الراجحي', price: '105.00 ر.س', sector: 'بنوك' },
+  { ticker: '2010.SR', name: 'STC الاتصالات', price: '55.20 ر.س', sector: 'اتصالات' },
+  { ticker: '1010.SR', name: 'سابك', price: '68.90 ر.س', sector: 'بتروكيماويات' },
+  { ticker: '2350.SR', name: 'كيان السعودية', price: '12.50 ر.س', sector: 'بتروكيماويات' },
+  { ticker: '1120.SR', name: 'الراجحي ريت', price: '8.50 ر.س', sector: 'صناديق عقارية' },
+  { ticker: '9010.SR', name: 'فالكم للأسهم السعودية', price: '42.30 ر.س', sector: 'صندوق ETF' },
+  { ticker: '9020.SR', name: 'HSBC أفضل 20 سعودي', price: '38.70 ر.س', sector: 'صندوق ETF' },
 ];
 
 const PORTFOLIOS = [
-  {
-    name: 'Simple Three-Fund',
-    risk: 'BALANCED — MEDIUM RISK',
-    riskClass: 'risk-medium',
-    expected: '~9.5%',
+  { name: 'المحفظة الثلاثية البسيطة', risk: 'متوازن — مخاطر متوسطة', riskClass: 'risk-medium', expected: '~9.5%',
     allocations: [
-      { ticker: 'VTI', pct: 60, label: 'US Total Market' },
-      { ticker: 'VXUS', pct: 25, label: 'International' },
-      { ticker: 'BND', pct: 15, label: 'Bonds' },
-    ]
-  },
-  {
-    name: 'Growth Machine',
-    risk: 'AGGRESSIVE — HIGH RISK',
-    riskClass: 'risk-high',
-    expected: '~12%',
+      { ticker: 'VTI', pct: 60, label: 'السوق الأمريكي الكامل' },
+      { ticker: 'VXUS', pct: 25, label: 'الأسواق الدولية' },
+      { ticker: 'BND', pct: 15, label: 'سندات' },
+    ]},
+  { name: 'محفظة النمو القوي', risk: 'عدواني — مخاطر عالية', riskClass: 'risk-high', expected: '~12%',
     allocations: [
-      { ticker: 'QQQ', pct: 40, label: 'NASDAQ-100' },
-      { ticker: 'VUG', pct: 30, label: 'US Growth' },
-      { ticker: 'VXUS', pct: 20, label: 'International' },
-      { ticker: 'ARKK', pct: 10, label: 'Innovation' },
-    ]
-  },
-  {
-    name: 'Income Generator',
-    risk: 'CONSERVATIVE — LOW-MED RISK',
-    riskClass: 'risk-low',
-    expected: '~7.5% + 3% Yield',
+      { ticker: 'QQQ', pct: 40, label: 'ناسداك-100' },
+      { ticker: 'VUG', pct: 30, label: 'نمو أمريكي' },
+      { ticker: 'VXUS', pct: 20, label: 'دولي' },
+      { ticker: 'ARKK', pct: 10, label: 'ابتكار' },
+    ]},
+  { name: 'محفظة الدخل الثابت', risk: 'محافظ — مخاطر منخفضة-متوسطة', riskClass: 'risk-low', expected: '~7.5% + 3% توزيعات',
     allocations: [
-      { ticker: 'SCHD', pct: 35, label: 'US Dividend' },
-      { ticker: 'VIG', pct: 25, label: 'Div Growth' },
-      { ticker: 'BND', pct: 20, label: 'Bonds' },
-      { ticker: 'VNQ', pct: 15, label: 'Real Estate' },
-      { ticker: 'VXUS', pct: 5, label: 'International' },
-    ]
-  },
-  {
-    name: 'All-Weather',
-    risk: 'BALANCED — MEDIUM RISK',
-    riskClass: 'risk-medium',
-    expected: '~9%',
+      { ticker: 'SCHD', pct: 35, label: 'توزيعات أمريكية' },
+      { ticker: 'VIG', pct: 25, label: 'نمو التوزيعات' },
+      { ticker: 'BND', pct: 20, label: 'سندات' },
+      { ticker: 'VNQ', pct: 15, label: 'عقارات' },
+      { ticker: 'VXUS', pct: 5, label: 'دولي' },
+    ]},
+  { name: 'محفظة لكل الأوقات', risk: 'متوازن — مخاطر متوسطة', riskClass: 'risk-medium', expected: '~9%',
     allocations: [
       { ticker: 'VOO', pct: 35, label: 'S&P 500' },
-      { ticker: 'VXUS', pct: 20, label: 'International' },
-      { ticker: 'SCHD', pct: 15, label: 'US Dividend' },
-      { ticker: 'BND', pct: 15, label: 'Bonds' },
-      { ticker: 'VNQ', pct: 10, label: 'Real Estate' },
-      { ticker: 'QQQ', pct: 5, label: 'NASDAQ-100' },
-    ]
-  },
+      { ticker: 'VXUS', pct: 20, label: 'دولي' },
+      { ticker: 'SCHD', pct: 15, label: 'توزيعات' },
+      { ticker: 'BND', pct: 15, label: 'سندات' },
+      { ticker: 'VNQ', pct: 10, label: 'عقارات' },
+      { ticker: 'QQQ', pct: 5, label: 'ناسداك-100' },
+    ]},
 ];
 
 const BROKERS = [
-  { name: 'Interactive Brokers', desc: 'Best overall for Saudi investors. Full US ETF access, lowest commissions, supports SAR deposits. Professional-grade platform.', features: 'US/EU/Asia markets, $0 min, low commissions' },
-  { name: 'Saxo Bank MENA', desc: 'Danish broker with strong Middle East presence. Good research tools, supports multiple currencies including SAR.', features: 'Multi-asset, research tools, SAR support' },
-  { name: 'Al Rajhi Capital', desc: 'Saudi local broker. Best for Tadawul access. Sharia-compliant options available. Limited international access.', features: 'Tadawul, Sharia-compliant, local support' },
-  { name: 'Derayah Financial', desc: 'Saudi fintech broker. Modern app, good for beginners. Access to Saudi and some international markets.', features: 'Modern UI, Saudi + international, app-first' },
-  { name: 'eToro', desc: 'Social trading platform. Copy-trade feature lets you follow successful investors. Good for beginners but higher spreads.', features: 'Social trading, copy-trade, easy UI' },
-  { name: 'SNB Capital', desc: 'Saudi National Bank investment arm. Institutional-grade research. Best for high-net-worth Saudi investors.', features: 'Research, Tadawul, managed portfolios' },
+  { name: 'Interactive Brokers', desc: 'الأفضل للمستثمر السعودي. وصول كامل لصناديق ETF الأمريكية، أقل عمولات، يدعم الإيداع بالريال. منصة احترافية.', features: 'أسواق أمريكا/أوروبا/آسيا، بدون حد أدنى' },
+  { name: 'Saxo Bank MENA', desc: 'بنك دنماركي بحضور قوي في الشرق الأوسط. أدوات بحث ممتازة، يدعم عملات متعددة بما فيها الريال.', features: 'أصول متعددة، أدوات بحث، دعم الريال' },
+  { name: 'الراجحي كابيتال', desc: 'وسيط سعودي محلي. الأفضل للوصول لتداول. خيارات متوافقة مع الشريعة. وصول دولي محدود.', features: 'تداول، متوافق مع الشريعة، دعم محلي' },
+  { name: 'دراية المالية', desc: 'وسيط فنتك سعودي. تطبيق حديث، جيد للمبتدئين. وصول للسوق السعودي وبعض الأسواق الدولية.', features: 'واجهة حديثة، سعودي + دولي' },
+  { name: 'eToro', desc: 'منصة تداول اجتماعي. خاصية نسخ الصفقات تسمح بمتابعة المستثمرين الناجحين. جيدة للمبتدئين لكن فروقات أعلى.', features: 'تداول اجتماعي، نسخ صفقات' },
+  { name: 'SNB Capital', desc: 'الذراع الاستثماري للبنك الأهلي. أبحاث مؤسسية. الأفضل للمستثمرين السعوديين ذوي الملاءة العالية.', features: 'أبحاث، تداول، محافظ مُدارة' },
 ];
 
 // ============================================================
-// RENDER FUNCTIONS
+// RENDER
 // ============================================================
-
-function formatSAR(num) {
-  return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' SAR';
-}
+function formatSAR(n) { return n.toLocaleString('en-US') + ' ر.س'; }
 
 function renderMarquee() {
   const items = [...ETF_DATA, ...STOCK_DATA.slice(0, 5)];
-  const html = items.map(item => {
-    const ret = item.return1y || item.cagr5y || 0;
+  const html = items.map(i => {
+    const ret = i.return1y || i.cagr5y || 0;
     const cls = ret >= 0 ? 'm-positive' : 'm-negative';
-    const sign = ret >= 0 ? '+' : '';
-    return `<span class="marquee-item">
-      <span class="m-ticker">${item.ticker}</span>
-      <span class="${cls}">${sign}${ret.toFixed(1)}%</span>
-      <span class="m-dot"></span>
-    </span>`;
+    return `<span class="marquee-item"><span class="m-ticker">${i.ticker}</span><span class="${cls}">${ret >= 0 ? '+' : ''}${ret.toFixed(1)}%</span><span class="m-dot"></span></span>`;
   }).join('');
   document.getElementById('marqueeTrack').innerHTML = html + html;
 }
 
 function renderETFTable() {
   const sorted = [...ETF_DATA].sort((a, b) => b.cagr5y - a.cagr5y);
-  const tbody = document.getElementById('etfTableBody');
-  tbody.innerHTML = sorted.map((etf, i) => {
-    const riskCls = etf.risk.includes('Low') ? 'risk-low' :
-                    etf.risk.includes('Very High') || etf.risk.includes('High') ? 'risk-high' : 'risk-medium';
-    const retCls = etf.return1y >= 0 ? 'positive' : 'negative';
-    const cagrCls = etf.cagr5y >= 0 ? 'positive' : 'negative';
+  document.getElementById('etfTableBody').innerHTML = sorted.map((e, i) => {
+    const rc = e.riskEn.includes('Low') ? 'risk-low' : (e.riskEn.includes('Very') || e.riskEn === 'Med-High') ? 'risk-high' : 'risk-medium';
     return `<tr>
-      <td style="font-family:var(--font-mono);color:var(--text-muted);font-size:12px;">${i + 1}</td>
-      <td>
-        <div class="ticker">${etf.ticker}</div>
-        <div class="name">${etf.name}</div>
-      </td>
-      <td style="font-size:13px;color:var(--text-secondary);">${etf.category}</td>
-      <td class="expense">${etf.expense}</td>
-      <td class="expense">${etf.yield}</td>
-      <td class="${retCls}">${etf.return1y >= 0 ? '+' : ''}${etf.return1y.toFixed(1)}%</td>
-      <td class="${cagrCls}">${etf.cagr5y >= 0 ? '+' : ''}${etf.cagr5y.toFixed(1)}%</td>
-      <td><span class="risk-badge ${riskCls}">${etf.risk}</span></td>
+      <td class="mono">${i+1}</td>
+      <td><span class="ticker">${e.ticker}</span><div class="name">${e.name}</div></td>
+      <td style="font-size:13px;color:var(--text-secondary);">${e.category}</td>
+      <td class="mono">${e.expense}</td>
+      <td class="mono">${e.yield}</td>
+      <td class="${e.return1y>=0?'positive':'negative'}">${e.return1y>=0?'+':''}${e.return1y.toFixed(1)}%</td>
+      <td class="${e.cagr5y>=0?'positive':'negative'}">${e.cagr5y>=0?'+':''}${e.cagr5y.toFixed(1)}%</td>
+      <td><span class="risk-badge ${rc}">${e.risk}</span></td>
     </tr>`;
   }).join('');
 }
 
 function renderStocks() {
-  const container = document.getElementById('stockList');
-  container.innerHTML = `
-    <div style="display:flex;gap:16px;padding:8px 20px;margin-bottom:4px;">
-      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);width:28px;text-align:center;">#</span>
-      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);flex:1;">Stock</span>
-      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);width:80px;text-align:right;">Price</span>
-      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);width:70px;text-align:right;">1Y</span>
-      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);width:60px;text-align:right;">P/E</span>
-      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);width:200px;">Catalyst</span>
-    </div>
-  ` + STOCK_DATA.map((s, i) => {
+  document.getElementById('stockList').innerHTML = STOCK_DATA.map((s, i) => {
     const cls = s.return1y >= 0 ? 'positive' : 'negative';
     return `<div class="stock-row">
-      <div class="stock-rank">${i + 1}</div>
-      <div class="stock-info">
-        <div class="stock-ticker-name">${s.ticker}</div>
-        <div class="stock-company">${s.company}</div>
-      </div>
+      <div class="stock-rank">${i+1}</div>
+      <div class="stock-info"><div class="stock-ticker-name">${s.ticker}</div><div class="stock-company">${s.company}</div></div>
       <div class="stock-price">$${s.price}</div>
-      <div class="stock-change ${cls}">${s.return1y >= 0 ? '+' : ''}${s.return1y}%</div>
+      <div class="stock-change ${cls}">${s.return1y>=0?'+':''}${s.return1y}%</div>
       <div class="stock-pe">${s.pe}x</div>
       <div class="stock-reason">${s.reason}</div>
     </div>`;
@@ -1394,283 +921,147 @@ function renderStocks() {
 }
 
 function renderSaudiStocks() {
-  const container = document.getElementById('saudiList');
-  container.innerHTML = SAUDI_STOCKS.map((s, i) => {
-    return `<div class="stock-row">
-      <div class="stock-rank">${i + 1}</div>
-      <div class="stock-info">
-        <div class="stock-ticker-name">${s.ticker}</div>
-        <div class="stock-company">${s.name}</div>
-      </div>
+  document.getElementById('saudiList').innerHTML = SAUDI_STOCKS.map((s, i) =>
+    `<div class="stock-row">
+      <div class="stock-rank">${i+1}</div>
+      <div class="stock-info"><div class="stock-ticker-name">${s.ticker}</div><div class="stock-company">${s.name}</div></div>
       <div class="stock-price" style="width:100px;">${s.price}</div>
-      <div class="stock-reason" style="width:120px;">
-        <span class="risk-badge risk-medium">${s.sector}</span>
-      </div>
-    </div>`;
-  }).join('');
+      <div class="stock-reason" style="width:120px;"><span class="risk-badge risk-medium">${s.sector}</span></div>
+    </div>`
+  ).join('');
 }
 
 function renderEducation() {
-  const grid = document.getElementById('eduGrid');
-  grid.innerHTML = ETF_DATA.map(etf => {
-    const retCls = etf.cagr5y >= 0 ? 'positive' : 'negative';
+  document.getElementById('eduGrid').innerHTML = ETF_DATA.map(e => {
+    const rc = e.cagr5y >= 0 ? 'positive' : 'negative';
     return `<div class="edu-card reveal">
-      <div class="card-accent" style="background: ${etf.color};"></div>
-      <div class="etf-ticker">${etf.ticker}</div>
-      <div class="etf-name">${etf.name}</div>
-      <div class="etf-desc">${etf.desc}</div>
+      <div class="card-accent" style="background:${e.color};"></div>
+      <div class="etf-ticker">${e.ticker}</div>
+      <div class="etf-name">${e.name}</div>
+      <div class="etf-desc">${e.desc}</div>
       <div style="font-size:12px;color:var(--accent-cyan);margin-bottom:12px;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px;"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        Best for: ${etf.who}
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-left:4px;"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        يناسب: ${e.who}
       </div>
       <div class="etf-stats">
-        <div>
-          <div class="etf-stat-label">5Y CAGR</div>
-          <div class="etf-stat-value ${retCls}">${etf.cagr5y >= 0 ? '+' : ''}${etf.cagr5y}%</div>
-        </div>
-        <div>
-          <div class="etf-stat-label">Expense</div>
-          <div class="etf-stat-value" style="color:var(--text-secondary);">${etf.expense}</div>
-        </div>
-        <div>
-          <div class="etf-stat-label">Yield</div>
-          <div class="etf-stat-value" style="color:var(--accent-gold);">${etf.yield}</div>
-        </div>
+        <div><div class="etf-stat-label">CAGR 5 سنوات</div><div class="etf-stat-value ${rc}">${e.cagr5y>=0?'+':''}${e.cagr5y}%</div></div>
+        <div><div class="etf-stat-label">الرسوم</div><div class="etf-stat-value" style="color:var(--text-secondary);">${e.expense}</div></div>
+        <div><div class="etf-stat-label">التوزيعات</div><div class="etf-stat-value" style="color:var(--accent);">${e.yield}</div></div>
       </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);">
-        <strong style="color:var(--text-secondary);">Top holdings:</strong> ${etf.topHoldings}
-      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text-muted);"><strong style="color:var(--text-secondary);">أكبر المقتنيات:</strong> ${e.topHoldings}</div>
     </div>`;
   }).join('');
 }
 
 function renderPortfolios() {
-  const grid = document.getElementById('portfolioGrid');
-  grid.innerHTML = PORTFOLIOS.map(pf => {
-    const allocHtml = pf.allocations.map(a => `
-      <div class="pf-alloc-row">
-        <span><span class="ticker">${a.ticker}</span> <span style="color:var(--text-muted);font-size:12px;">${a.label}</span></span>
-        <span class="pct">${a.pct}%</span>
-      </div>
-      <div class="pf-bar"><div class="pf-bar-fill" style="width:${a.pct}%;background:${ETF_DATA.find(e=>e.ticker===a.ticker)?.color || 'var(--accent-gold)'}"></div></div>
-    `).join('');
+  document.getElementById('portfolioGrid').innerHTML = PORTFOLIOS.map(pf => {
+    const alloc = pf.allocations.map(a =>
+      `<div class="pf-alloc-row"><span><span class="ticker">${a.ticker}</span> <span style="color:var(--text-muted);font-size:12px;">${a.label}</span></span><span class="pct">${a.pct}%</span></div>
+      <div class="pf-bar"><div class="pf-bar-fill" style="width:${a.pct}%;background:${ETF_DATA.find(e=>e.ticker===a.ticker)?.color||'var(--accent)'}"></div></div>`
+    ).join('');
     return `<div class="portfolio-card reveal">
       <div class="pf-name">${pf.name}</div>
       <div class="pf-risk"><span class="risk-badge ${pf.riskClass}">${pf.risk}</span></div>
-      <div class="pf-allocation">${allocHtml}</div>
-      <div class="pf-expected">
-        <span class="lbl">Expected Annual Return</span>
-        <span class="val">${pf.expected}</span>
-      </div>
+      <div class="pf-allocation">${alloc}</div>
+      <div class="pf-expected"><span class="lbl">العائد السنوي المتوقع</span><span class="val">${pf.expected}</span></div>
     </div>`;
   }).join('');
 }
 
 function renderBrokers() {
-  const grid = document.getElementById('brokerGrid');
-  grid.innerHTML = BROKERS.map(b => `
-    <div class="edu-card reveal">
-      <div class="card-accent" style="background: var(--accent-gold);"></div>
-      <div class="etf-ticker">${b.name}</div>
+  document.getElementById('brokerGrid').innerHTML = BROKERS.map(b =>
+    `<div class="edu-card reveal">
+      <div class="card-accent" style="background:var(--accent);"></div>
+      <div class="etf-ticker" style="font-family:var(--font-ar);font-size:18px;">${b.name}</div>
       <div class="etf-desc">${b.desc}</div>
       <div style="font-size:12px;color:var(--accent-cyan);">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-left:4px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         ${b.features}
       </div>
-    </div>
-  `).join('');
+    </div>`
+  ).join('');
 }
 
 function renderQuickStats() {
-  const container = document.getElementById('quickStats');
-  const bestCAGR = ETF_DATA.reduce((a, b) => a.cagr5y > b.cagr5y ? a : b);
-  const best1Y = ETF_DATA.reduce((a, b) => a.return1y > b.return1y ? a : b);
-  const cheapest = ETF_DATA.reduce((a, b) => parseFloat(a.expense) < parseFloat(b.expense) ? a : b);
-  const bestYield = ETF_DATA.reduce((a, b) => parseFloat(a.yield) > parseFloat(b.yield) ? a : b);
-
+  const best5 = ETF_DATA.reduce((a,b) => a.cagr5y > b.cagr5y ? a : b);
+  const best1 = ETF_DATA.reduce((a,b) => a.return1y > b.return1y ? a : b);
+  const cheap = ETF_DATA.reduce((a,b) => parseFloat(a.expense) < parseFloat(b.expense) ? a : b);
+  const bestY = ETF_DATA.reduce((a,b) => parseFloat(a.yield) > parseFloat(b.yield) ? a : b);
   const stats = [
-    { label: 'Best 5Y CAGR', value: `${bestCAGR.ticker} +${bestCAGR.cagr5y}%`, color: 'var(--accent-green)' },
-    { label: 'Best 1Y Return', value: `${best1Y.ticker} +${best1Y.return1y}%`, color: 'var(--accent-purple)' },
-    { label: 'Lowest Cost', value: `${cheapest.ticker} ${cheapest.expense}`, color: 'var(--accent-cyan)' },
-    { label: 'Highest Yield', value: `${bestYield.ticker} ${bestYield.yield}`, color: 'var(--accent-gold)' },
-    { label: '1M SAR in USD', value: '$266,667', color: 'var(--text-primary)' },
+    { label: 'أفضل CAGR 5 سنوات', value: `${best5.ticker} +${best5.cagr5y}%`, color: 'var(--accent-green)' },
+    { label: 'أفضل عائد سنة', value: `${best1.ticker} +${best1.return1y}%`, color: 'var(--accent-purple)' },
+    { label: 'أقل تكلفة', value: `${cheap.ticker} ${cheap.expense}`, color: 'var(--accent-cyan)' },
+    { label: 'أعلى توزيعات', value: `${bestY.ticker} ${bestY.yield}`, color: 'var(--accent)' },
+    { label: 'مليون ريال بالدولار', value: '$266,667', color: 'var(--text-primary)' },
   ];
-
-  container.innerHTML = stats.map(s => `
-    <div style="padding:12px 16px;background:var(--bg-surface);border-radius:10px;border:1px solid var(--border);">
-      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);">${s.label}</div>
-      <div style="font-family:var(--font-mono);font-size:15px;font-weight:600;color:${s.color};margin-top:4px;">${s.value}</div>
-    </div>
-  `).join('');
+  document.getElementById('quickStats').innerHTML = stats.map(s =>
+    `<div style="padding:10px 14px;background:var(--bg-surface);border-radius:10px;border:1px solid var(--border);">
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);">${s.label}</div>
+      <div style="font-family:var(--font-mono);font-size:14px;font-weight:600;color:${s.color};margin-top:3px;direction:ltr;display:inline-block;">${s.value}</div>
+    </div>`
+  ).join('');
 }
 
 // ============================================================
 // CHARTS
 // ============================================================
-
-const chartDefaults = {
-  responsive: true,
-  maintainAspectRatio: false,
+const chartOpts = {
+  responsive: true, maintainAspectRatio: false,
   plugins: {
     legend: { display: false },
-    tooltip: {
-      backgroundColor: '#161b22',
-      titleColor: '#f1f5f9',
-      bodyColor: '#94a3b8',
-      borderColor: '#1e293b',
-      borderWidth: 1,
-      padding: 12,
-      cornerRadius: 8,
-      titleFont: { family: "'JetBrains Mono', monospace", size: 12 },
-      bodyFont: { family: "'DM Sans', sans-serif", size: 13 },
-    }
+    tooltip: { backgroundColor: '#fff', titleColor: '#1a1814', bodyColor: '#5c564a', borderColor: '#e2dfd8', borderWidth: 1, padding: 12, cornerRadius: 8,
+      titleFont: { family: "'JetBrains Mono',monospace", size: 12 }, bodyFont: { family: "'Cairo',sans-serif", size: 13 } }
   },
   scales: {
-    x: {
-      grid: { color: 'rgba(30,41,59,0.4)', lineWidth: 0.5 },
-      ticks: { color: '#64748b', font: { family: "'JetBrains Mono', monospace", size: 11 } },
-      border: { color: '#1e293b' }
-    },
-    y: {
-      grid: { color: 'rgba(30,41,59,0.4)', lineWidth: 0.5 },
-      ticks: { color: '#64748b', font: { family: "'JetBrains Mono', monospace", size: 11 }, callback: v => v + '%' },
-      border: { color: '#1e293b' }
-    }
+    x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#8a8478', font: { family: "'JetBrains Mono',monospace", size: 11 } }, border: { color: '#e2dfd8' } },
+    y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#8a8478', font: { family: "'JetBrains Mono',monospace", size: 11 }, callback: v => v+'%' }, border: { color: '#e2dfd8' } }
   }
 };
 
 let etfChart, growthChart, simChart;
 
 function buildETFChart() {
-  const sorted = [...ETF_DATA].sort((a, b) => b.cagr5y - a.cagr5y);
-  const ctx = document.getElementById('etfCompareChart').getContext('2d');
-  etfChart = new Chart(ctx, {
+  const sorted = [...ETF_DATA].sort((a,b) => b.cagr5y - a.cagr5y);
+  etfChart = new Chart(document.getElementById('etfCompareChart'), {
     type: 'bar',
-    data: {
-      labels: sorted.map(e => e.ticker),
-      datasets: [{
-        label: '5Y CAGR',
-        data: sorted.map(e => e.cagr5y),
-        backgroundColor: sorted.map(e => e.cagr5y >= 0 ? e.color + '99' : '#ef444499'),
-        borderColor: sorted.map(e => e.cagr5y >= 0 ? e.color : '#ef4444'),
-        borderWidth: 1,
-        borderRadius: 6,
-        barThickness: 36,
-      }]
-    },
-    options: {
-      ...chartDefaults,
-      plugins: {
-        ...chartDefaults.plugins,
-        legend: { display: false },
-        tooltip: {
-          ...chartDefaults.plugins.tooltip,
-          callbacks: {
-            label: ctx => {
-              const etf = sorted[ctx.dataIndex];
-              return [`CAGR: ${etf.cagr5y}%`, `1Y: +${etf.return1y}%`, `Yield: ${etf.yield}`];
-            }
-          }
-        }
-      }
-    }
+    data: { labels: sorted.map(e=>e.ticker),
+      datasets: [{ data: sorted.map(e=>e.cagr5y), backgroundColor: sorted.map(e=> e.cagr5y>=0 ? e.color+'cc' : '#dc2626cc'), borderColor: sorted.map(e=> e.cagr5y>=0 ? e.color : '#dc2626'), borderWidth: 1, borderRadius: 6, barThickness: 32 }] },
+    options: chartOpts
   });
 }
 
 function switchChart(mode) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   event.target.classList.add('active');
-
-  const sorted = [...ETF_DATA].sort((a, b) => {
-    if (mode === 'cagr') return b.cagr5y - a.cagr5y;
-    if (mode === 'return1y') return b.return1y - a.return1y;
-    return parseFloat(b.yield) - parseFloat(a.yield);
+  const sorted = [...ETF_DATA].sort((a,b) => {
+    if(mode==='cagr') return b.cagr5y-a.cagr5y;
+    if(mode==='return1y') return b.return1y-a.return1y;
+    return parseFloat(b.yield)-parseFloat(a.yield);
   });
-
-  etfChart.data.labels = sorted.map(e => e.ticker);
-  etfChart.data.datasets[0].data = sorted.map(e => {
-    if (mode === 'cagr') return e.cagr5y;
-    if (mode === 'return1y') return e.return1y;
-    return parseFloat(e.yield);
-  });
-  etfChart.data.datasets[0].label = mode === 'cagr' ? '5Y CAGR' : mode === 'return1y' ? '1Y Return' : 'Dividend Yield';
-  etfChart.data.datasets[0].backgroundColor = sorted.map(e => {
-    const val = mode === 'cagr' ? e.cagr5y : mode === 'return1y' ? e.return1y : parseFloat(e.yield);
-    return val >= 0 ? e.color + '99' : '#ef444499';
-  });
-  etfChart.data.datasets[0].borderColor = sorted.map(e => {
-    const val = mode === 'cagr' ? e.cagr5y : mode === 'return1y' ? e.return1y : parseFloat(e.yield);
-    return val >= 0 ? e.color : '#ef4444';
-  });
-  if (mode === 'yield') {
-    etfChart.options.scales.y.ticks.callback = v => v + '%';
-  }
+  etfChart.data.labels = sorted.map(e=>e.ticker);
+  etfChart.data.datasets[0].data = sorted.map(e=> mode==='cagr'?e.cagr5y:mode==='return1y'?e.return1y:parseFloat(e.yield));
+  etfChart.data.datasets[0].backgroundColor = sorted.map(e=>e.color+'cc');
+  etfChart.data.datasets[0].borderColor = sorted.map(e=>e.color);
   etfChart.update('active');
 }
 
 function buildGrowthChart() {
-  const ctx = document.getElementById('growthChart').getContext('2d');
-  const years = [2026, 2027, 2028, 2029, 2030, 2031];
-  const scenarios = {
-    'Conservative (7%)': { rate: 0.07, color: '#64748b' },
-    'Balanced (9.5%)': { rate: 0.095, color: '#f59e0b' },
-    'Aggressive (12%)': { rate: 0.12, color: '#10b981' },
-  };
-
-  const datasets = Object.entries(scenarios).map(([label, { rate, color }]) => {
-    const data = years.map((_, i) => Math.round(1000000 * Math.pow(1 + rate, i)));
-    return {
-      label,
-      data,
-      borderColor: color,
-      backgroundColor: color + '15',
-      fill: true,
-      tension: 0.4,
-      pointRadius: 4,
-      pointHoverRadius: 7,
-      pointBackgroundColor: color,
-      pointBorderColor: '#0d1117',
-      pointBorderWidth: 2,
-      borderWidth: 2.5,
-    };
-  });
-
-  growthChart = new Chart(ctx, {
+  const years = [2026,2027,2028,2029,2030,2031];
+  const scenarios = { 'محافظ (7%)': {r:.07,c:'#64748b'}, 'متوازن (9.5%)': {r:.095,c:'#b8860b'}, 'عدواني (12%)': {r:.12,c:'#16a34a'} };
+  growthChart = new Chart(document.getElementById('growthChart'), {
     type: 'line',
-    data: { labels: years, datasets },
-    options: {
-      ...chartDefaults,
-      plugins: {
-        ...chartDefaults.plugins,
-        legend: {
-          display: true,
-          position: 'top',
-          align: 'end',
-          labels: {
-            color: '#94a3b8',
-            font: { family: "'JetBrains Mono', monospace", size: 11 },
-            boxWidth: 12,
-            boxHeight: 2,
-            padding: 16,
-          }
-        },
-        tooltip: {
-          ...chartDefaults.plugins.tooltip,
-          callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${formatSAR(ctx.parsed.y)}`
-          }
-        }
+    data: { labels: years,
+      datasets: Object.entries(scenarios).map(([l,{r,c}]) => ({
+        label: l, data: years.map((_,i)=>Math.round(1000000*Math.pow(1+r,i))),
+        borderColor: c, backgroundColor: c+'12', fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7, pointBackgroundColor: c, pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 2.5
+      }))
+    },
+    options: { ...chartOpts,
+      plugins: { ...chartOpts.plugins,
+        legend: { display: true, position: 'top', align: 'end', labels: { color: '#5c564a', font: { family: "'Cairo',sans-serif", size: 12 }, boxWidth: 12, boxHeight: 2, padding: 14 } },
+        tooltip: { ...chartOpts.plugins.tooltip, callbacks: { label: ctx => `${ctx.dataset.label}: ${formatSAR(ctx.parsed.y)}` } }
       },
-      scales: {
-        ...chartDefaults.scales,
-        y: {
-          ...chartDefaults.scales.y,
-          ticks: {
-            ...chartDefaults.scales.y.ticks,
-            callback: v => (v / 1000000).toFixed(1) + 'M'
-          }
-        }
-      }
+      scales: { ...chartOpts.scales, y: { ...chartOpts.scales.y, ticks: { ...chartOpts.scales.y.ticks, callback: v=>(v/1000000).toFixed(1)+'M' } } }
     }
   });
 }
@@ -1678,204 +1069,95 @@ function buildGrowthChart() {
 // ============================================================
 // SIMULATOR
 // ============================================================
-
-const strategyReturns = {
-  aggressive: { rate: 12, dividend: 0.4 },
-  balanced: { rate: 10, dividend: 1.1 },
-  conservative: { rate: 7, dividend: 3.0 },
-  income: { rate: 7.5, dividend: 3.4 },
-};
-
+const stratReturns = { aggressive:{rate:12,div:0.4}, balanced:{rate:10,div:1.1}, conservative:{rate:7,div:3.0}, income:{rate:7.5,div:3.4} };
 document.getElementById('simStrategy').addEventListener('change', function() {
-  if (this.value !== 'custom') {
-    const s = strategyReturns[this.value];
-    document.getElementById('simReturn').value = s.rate;
-    document.getElementById('simDividend').value = s.dividend;
-  }
+  if(this.value!=='custom') { const s=stratReturns[this.value]; document.getElementById('simReturn').value=s.rate; document.getElementById('simDividend').value=s.div; }
 });
 
 function runSimulation() {
-  const initial = parseFloat(document.getElementById('simAmount').value) || 1000000;
-  const monthly = parseFloat(document.getElementById('simMonthly').value) || 0;
-  const annualReturn = parseFloat(document.getElementById('simReturn').value) / 100;
-  const dividendYield = parseFloat(document.getElementById('simDividend').value) / 100;
-  const years = parseInt(document.getElementById('simYears').value) || 5;
-
-  const results = [];
-  let balance = initial;
-  const monthlyRate = annualReturn / 12;
-
-  for (let y = 1; y <= years; y++) {
-    for (let m = 0; m < 12; m++) {
-      balance = balance * (1 + monthlyRate) + monthly;
-    }
-    const totalContributed = initial + monthly * 12 * y;
-    const gain = balance - totalContributed;
-    const annualDividend = balance * dividendYield;
-    results.push({
-      year: 2026 + y,
-      balance: Math.round(balance),
-      gain: Math.round(gain),
-      dividend: Math.round(annualDividend),
-      totalContributed: Math.round(totalContributed),
-    });
+  const init = parseFloat(document.getElementById('simAmount').value)||1000000;
+  const monthly = parseFloat(document.getElementById('simMonthly').value)||0;
+  const annRet = parseFloat(document.getElementById('simReturn').value)/100;
+  const divYield = parseFloat(document.getElementById('simDividend').value)/100;
+  const years = parseInt(document.getElementById('simYears').value)||5;
+  const results = []; let bal = init; const mRate = annRet/12;
+  for(let y=1;y<=years;y++) {
+    for(let m=0;m<12;m++) bal = bal*(1+mRate)+monthly;
+    const contrib = init+monthly*12*y;
+    results.push({ year: 2026+y, balance: Math.round(bal), gain: Math.round(bal-contrib), dividend: Math.round(bal*divYield), contributed: Math.round(contrib) });
   }
-
-  const container = document.getElementById('simResults');
-  container.innerHTML = results.map(r => `
-    <div class="sim-result-card">
-      <div class="year">Year ${r.year}</div>
+  document.getElementById('simResults').innerHTML = results.map(r =>
+    `<div class="sim-result-card">
+      <div class="year">سنة ${r.year}</div>
       <div class="amount">${formatSAR(r.balance)}</div>
-      <div class="gain">+${formatSAR(r.gain)} gain</div>
-      <div class="dividend">${formatSAR(r.dividend)}/yr dividends</div>
-    </div>
-  `).join('');
-
-  // Update chart
-  if (simChart) simChart.destroy();
-  const ctx = document.getElementById('simChart').getContext('2d');
-  simChart = new Chart(ctx, {
+      <div class="gain">+${formatSAR(r.gain)} ربح</div>
+      <div class="dividend">${formatSAR(r.dividend)}/سنة توزيعات</div>
+    </div>`
+  ).join('');
+  if(simChart) simChart.destroy();
+  simChart = new Chart(document.getElementById('simChart'), {
     type: 'line',
-    data: {
-      labels: ['Start', ...results.map(r => r.year)],
+    data: { labels: ['البداية',...results.map(r=>r.year)],
       datasets: [
-        {
-          label: 'Portfolio Value',
-          data: [initial, ...results.map(r => r.balance)],
-          borderColor: '#f59e0b',
-          backgroundColor: 'rgba(245,158,11,0.08)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 5,
-          pointHoverRadius: 8,
-          pointBackgroundColor: '#f59e0b',
-          pointBorderColor: '#0d1117',
-          pointBorderWidth: 2,
-          borderWidth: 2.5,
-        },
-        {
-          label: 'Total Contributed',
-          data: [initial, ...results.map(r => r.totalContributed)],
-          borderColor: '#64748b',
-          backgroundColor: 'rgba(100,116,139,0.05)',
-          fill: true,
-          tension: 0,
-          pointRadius: 3,
-          borderWidth: 1.5,
-          borderDash: [5, 5],
-        }
+        { label: 'قيمة المحفظة', data: [init,...results.map(r=>r.balance)], borderColor: '#b8860b', backgroundColor: 'rgba(184,134,11,0.06)', fill: true, tension: .4, pointRadius: 5, pointHoverRadius: 8, pointBackgroundColor: '#b8860b', pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 2.5 },
+        { label: 'المبلغ المستثمر', data: [init,...results.map(r=>r.contributed)], borderColor: '#94a3b8', backgroundColor: 'rgba(148,163,184,0.04)', fill: true, tension: 0, pointRadius: 3, borderWidth: 1.5, borderDash: [5,5] }
       ]
     },
-    options: {
-      ...chartDefaults,
-      plugins: {
-        ...chartDefaults.plugins,
-        legend: {
-          display: true,
-          position: 'top',
-          align: 'end',
-          labels: {
-            color: '#94a3b8',
-            font: { family: "'JetBrains Mono', monospace", size: 11 },
-            boxWidth: 12,
-            boxHeight: 2,
-            padding: 16,
-          }
-        },
-        tooltip: {
-          ...chartDefaults.plugins.tooltip,
-          callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${formatSAR(ctx.parsed.y)}`
-          }
-        }
+    options: { ...chartOpts,
+      plugins: { ...chartOpts.plugins,
+        legend: { display:true, position:'top', align:'end', labels: { color:'#5c564a', font:{family:"'Cairo',sans-serif",size:12}, boxWidth:12, boxHeight:2, padding:14 } },
+        tooltip: { ...chartOpts.plugins.tooltip, callbacks: { label: ctx=>`${ctx.dataset.label}: ${formatSAR(ctx.parsed.y)}` } }
       },
-      scales: {
-        ...chartDefaults.scales,
-        y: {
-          ...chartDefaults.scales.y,
-          ticks: {
-            ...chartDefaults.scales.y.ticks,
-            callback: v => (v / 1000000).toFixed(2) + 'M'
-          }
-        }
-      }
+      scales: { ...chartOpts.scales, y: { ...chartOpts.scales.y, ticks: { ...chartOpts.scales.y.ticks, callback: v=>(v/1000000).toFixed(2)+'M' } } }
     }
   });
-
-  // Scroll to results
-  container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('simResults').scrollIntoView({ behavior:'smooth', block:'center' });
 }
 
 // ============================================================
 // COUNTERS
 // ============================================================
-function animateCounter(el, target, duration = 2000, decimal = false) {
-  let start = 0;
-  const prefix = el.dataset.prefix || '';
-  const suffix = el.dataset.suffix || '';
-  const step = timestamp => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 4);
-    const current = eased * target;
-    if (decimal) {
-      el.textContent = prefix + current.toFixed(2) + suffix;
-    } else {
-      el.textContent = prefix + Math.floor(current).toLocaleString() + suffix;
-    }
-    if (progress < 1) requestAnimationFrame(step);
+function animateCounter(el, target, dur=2000, dec=false) {
+  let start=0; const pfx=el.dataset.prefix||'', sfx=el.dataset.suffix||'';
+  const step = ts => {
+    if(!start) start=ts;
+    const p = Math.min((ts-start)/dur,1), e = 1-Math.pow(1-p,4), cur = e*target;
+    el.textContent = pfx+(dec?cur.toFixed(2):Math.floor(cur).toLocaleString())+sfx;
+    if(p<1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
 }
 
 // ============================================================
-// SPOTLIGHT HOVER
+// REVEAL OBSERVER (pure IntersectionObserver — no GSAP dependency)
 // ============================================================
-document.addEventListener('mousemove', e => {
-  document.querySelectorAll('.card, .edu-card, .portfolio-card, .simulator').forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.classList.add('visible');
     }
   });
-});
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+function observeReveals() {
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
 
 // ============================================================
-// GSAP ANIMATIONS
+// GSAP hero entrance only
 // ============================================================
 gsap.registerPlugin(ScrollTrigger);
+gsap.from('.hero-tag', { y:25, opacity:0, duration:0.7, ease:'power3.out', delay:0.2 });
+gsap.from('.hero h1', { y:40, opacity:0, duration:0.8, ease:'power4.out', delay:0.35 });
+gsap.from('.hero .subtitle', { y:25, opacity:0, duration:0.6, ease:'power3.out', delay:0.5 });
+gsap.from('.hero-stat', { y:30, opacity:0, duration:0.5, ease:'power3.out', stagger:0.08, delay:0.65 });
 
-// Hero entrance
-gsap.from('.hero-tag', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 });
-gsap.from('.hero h1', { y: 50, opacity: 0, duration: 0.9, ease: 'power4.out', delay: 0.4 });
-gsap.from('.hero .subtitle', { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', delay: 0.6 });
-gsap.from('.hero-stat', { y: 40, opacity: 0, duration: 0.6, ease: 'power3.out', stagger: 0.1, delay: 0.8 });
-
-// Counter animation on load
+// Counters
 setTimeout(() => {
   document.querySelectorAll('[data-counter]').forEach(el => {
-    const target = parseFloat(el.dataset.counter);
-    const isDecimal = el.dataset.decimal === 'true';
-    animateCounter(el, target, 2000, isDecimal);
+    animateCounter(el, parseFloat(el.dataset.counter), 2000, el.dataset.decimal==='true');
   });
-}, 1000);
-
-// Scroll reveals
-gsap.utils.toArray('.reveal').forEach(el => {
-  gsap.from(el, {
-    scrollTrigger: {
-      trigger: el,
-      start: 'top 88%',
-      end: 'top 60%',
-      toggleActions: 'play none none reverse',
-    },
-    y: 50,
-    opacity: 0,
-    duration: 0.7,
-    ease: 'power3.out'
-  });
-});
+}, 800);
 
 // ============================================================
 // INIT
@@ -1891,8 +1173,13 @@ renderQuickStats();
 buildETFChart();
 buildGrowthChart();
 
+// Observe reveals AFTER content is rendered
+requestAnimationFrame(() => {
+  observeReveals();
+});
+
 // Run default simulation
-setTimeout(runSimulation, 500);
+setTimeout(runSimulation, 400);
 </script>
 </body>
 </html>
