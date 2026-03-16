@@ -768,7 +768,8 @@ body {
         </thead>
         <tbody>
           <tr><td style="text-align:right;font-weight:700;">أساس أمريكي</td><td><span class="mono">35%</span></td><td><span class="mono">350,000</span></td><td><span class="ticker">VOO</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">العمود الفقري — معتمد من بافت، عوائد ثابتة</td></tr>
-          <tr><td style="text-align:right;font-weight:700;">نمو تقني</td><td><span class="mono">15%</span></td><td><span class="mono">150,000</span></td><td><span class="ticker">VUG</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">أنت شاب — استغل فرصة النمو التقني</td></tr>
+          <tr><td style="text-align:right;font-weight:700;">أشباه موصلات / AI</td><td><span class="mono">10%</span></td><td><span class="mono">100,000</span></td><td><span class="ticker">SMH</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">أفضل صندوق أداءً +263% في 5 سنوات — ثورة AI والرقائق</td></tr>
+          <tr><td style="text-align:right;font-weight:700;">نمو تقني</td><td><span class="mono">5%</span></td><td><span class="mono">50,000</span></td><td><span class="ticker">VUG</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">نمو واسع بتكلفة منخفضة جداً 0.03%</td></tr>
           <tr><td style="text-align:right;font-weight:700;">دولي</td><td><span class="mono">10%</span></td><td><span class="mono">100,000</span></td><td><span class="ticker">VXUS</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">2025 أثبت أهميته: +32% عائد دولي</td></tr>
           <tr><td style="text-align:right;font-weight:700;">توزيعات ونمو</td><td><span class="mono">10%</span></td><td><span class="mono">100,000</span></td><td><span class="ticker">SCHD</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">دخل ثابت + حماية من الانهيارات (-3% فقط في 2022)</td></tr>
           <tr><td style="text-align:right;font-weight:700;">السوق السعودي</td><td><span class="mono">10%</span></td><td><span class="mono">100,000</span></td><td><span class="ticker">تداول/KSA</span></td><td style="text-align:right;font-size:12px;color:var(--text-secondary);">رؤية 2030 + ميزة السوق المحلي</td></tr>
@@ -939,6 +940,7 @@ body {
 // DATA
 // ============================================================
 const ETF_DATA = [
+  { ticker: 'SMH', name: 'VanEck Semiconductor ETF', nameEn: 'VanEck Semiconductor', category: 'أشباه موصلات', expense: '0.35%', yield: '0.42%', return1y: 75.0, cagr5y: 29.4, risk: 'عالي', riskEn: 'High', color: '#059669', desc: 'صندوق أشباه الموصلات — إنفيديا 17.7%، TSMC 11.4%، برودكوم، مايكرون. أفضل صندوق أداءً في آخر 5 سنوات (+263% تراكمي). مدفوع بطفرة الذكاء الاصطناعي ومراكز البيانات. 25 سهم فقط — مركّز جداً.', who: 'مستثمري النمو العدواني، المؤمنين بثورة AI والرقائق', topHoldings: 'NVDA 17.7%, TSM 11.4%, AVGO, MU, ASML' },
   { ticker: 'QQQ', name: 'Invesco QQQ (ناسداك-100)', nameEn: 'Invesco QQQ Trust', category: 'ناسداك-100', expense: '0.18%', yield: '0.46%', return1y: 26.11, cagr5y: 14.23, risk: 'متوسط-عالي', riskEn: 'Med-High', color: '#7c3aed', desc: 'يتتبع أكبر 100 شركة غير مالية في ناسداك. تركيز كبير على التقنية — أبل، مايكروسوفت، إنفيديا، أمازون، ميتا. الأفضل للمستثمرين الباحثين عن نمو قوي.', who: 'مستثمري النمو، المؤمنين بالتقنية', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
   { ticker: 'VUG', name: 'Vanguard Growth ETF', nameEn: 'Vanguard Growth ETF', category: 'نمو أمريكي', expense: '0.03%', yield: '0.44%', return1y: 21.23, cagr5y: 12.76, risk: 'متوسط-عالي', riskEn: 'Med-High', color: '#0891b2', desc: 'أسهم نمو أمريكية واسعة بتكلفة منخفضة جداً. مشابه لـ QQQ لكن أوسع — يشمل أسهم نمو من جميع القطاعات. رسوم 0.03% فقط.', who: 'مستثمري النمو الحريصين على التكلفة', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
   { ticker: 'VOO', name: 'Vanguard S&P 500 ETF', nameEn: 'Vanguard S&P 500', category: 'S&P 500', expense: '0.03%', yield: '1.15%', return1y: 20.57, cagr5y: 12.69, risk: 'متوسط', riskEn: 'Medium', color: '#b8860b', desc: 'المعيار الذهبي. يتتبع أكبر 500 شركة أمريكية. تنويع فوري عبر جميع القطاعات. وارن بافت ينصح به لأغلب المستثمرين.', who: 'الجميع — الخيار الافتراضي لأي محفظة', topHoldings: 'AAPL, MSFT, NVDA, AMZN, META' },
@@ -1306,6 +1308,7 @@ setTimeout(() => {
 // YEAR-BY-YEAR DATA & 5-YEAR CHART
 // ============================================================
 const YEARLY = {
+  SMH:  { y: [42.14, -33.52, 73.37, 39.08, 49.17], cum: 263, color: '#059669' },
   QQQ:  { y: [27.42, -32.58, 54.86, 25.58, 20.77], cum: 95, color: '#7c3aed' },
   VUG:  { y: [27.34, -33.16, 46.84, 32.69, 19.41], cum: 93, color: '#0891b2' },
   VOO:  { y: [28.78, -18.19, 26.32, 24.98, 17.82], cum: 80, color: '#b8860b' },
@@ -1386,9 +1389,9 @@ function renderCountdown() {
 }
 
 function buildRecChart() {
-  const labels = ['VOO 35%','VUG 15%','VXUS 10%','SCHD 10%','السعودي 10%','BND 10%','VWO 5%','طوارئ 5%'];
-  const data = [35, 15, 10, 10, 10, 10, 5, 5];
-  const colors = ['#b8860b','#0891b2','#db2777','#16a34a','#ea580c','#64748b','#7c3aed','#94a3b8'];
+  const labels = ['VOO 35%','SMH 10%','VXUS 10%','SCHD 10%','السعودي 10%','BND 10%','VWO 5%','VUG 5%','طوارئ 5%'];
+  const data = [35, 10, 10, 10, 10, 10, 5, 5, 5];
+  const colors = ['#b8860b','#059669','#db2777','#16a34a','#ea580c','#64748b','#7c3aed','#0891b2','#94a3b8'];
   new Chart(document.getElementById('recChart'), {
     type: 'doughnut',
     data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: '#fff', borderWidth: 3, hoverOffset: 8 }] },
