@@ -263,37 +263,50 @@ body {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  table-layout: fixed;
 }
 .etf-table th {
   background: var(--bg-surface);
-  padding: 14px 16px;
-  text-align: right;
+  padding: 14px 12px;
+  text-align: center;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
   white-space: nowrap;
 }
 .etf-table td {
-  padding: 14px 16px;
+  padding: 12px;
   border-bottom: 1px solid var(--bg-surface);
   vertical-align: middle;
+  text-align: center;
 }
+/* Column widths */
+.etf-table th:nth-child(1), .etf-table td:nth-child(1) { width: 40px; }
+.etf-table th:nth-child(2), .etf-table td:nth-child(2) { width: 220px; text-align: right; }
+.etf-table th:nth-child(3), .etf-table td:nth-child(3) { width: 140px; }
+.etf-table th:nth-child(4), .etf-table td:nth-child(4) { width: 70px; }
+.etf-table th:nth-child(5), .etf-table td:nth-child(5) { width: 70px; }
+.etf-table th:nth-child(6), .etf-table td:nth-child(6) { width: 90px; }
+.etf-table th:nth-child(7), .etf-table td:nth-child(7) { width: 110px; }
+.etf-table th:nth-child(8), .etf-table td:nth-child(8) { width: 110px; }
 .etf-table tbody tr { transition: background 0.15s; }
 .etf-table tbody tr:hover { background: var(--accent-dim); }
+.etf-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.015); }
+.etf-table tbody tr:nth-child(even):hover { background: var(--accent-dim); }
 .etf-table .ticker {
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 15px;
   color: var(--accent);
   direction: ltr;
-  display: inline-block;
+  unicode-bidi: isolate;
 }
-.etf-table .name { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
-.positive { color: var(--accent-green); font-family: var(--font-mono); font-weight: 500; direction: ltr; display: inline-block; }
-.negative { color: var(--accent-red); font-family: var(--font-mono); font-weight: 500; direction: ltr; display: inline-block; }
-.mono { font-family: var(--font-mono); color: var(--text-secondary); direction: ltr; display: inline-block; }
+.etf-table .name { color: var(--text-secondary); font-size: 11px; margin-top: 2px; line-height: 1.4; }
+.positive { color: var(--accent-green); font-family: var(--font-mono); font-weight: 600; direction: ltr; unicode-bidi: isolate; }
+.negative { color: var(--accent-red); font-family: var(--font-mono); font-weight: 600; direction: ltr; unicode-bidi: isolate; }
+.mono { font-family: var(--font-mono); color: var(--text-secondary); direction: ltr; unicode-bidi: isolate; }
 .risk-badge {
   display: inline-block;
   padding: 3px 10px;
@@ -894,13 +907,13 @@ function renderETFTable() {
   document.getElementById('etfTableBody').innerHTML = sorted.map((e, i) => {
     const rc = e.riskEn.includes('Low') ? 'risk-low' : (e.riskEn.includes('Very') || e.riskEn === 'Med-High') ? 'risk-high' : 'risk-medium';
     return `<tr>
-      <td class="mono">${i+1}</td>
-      <td><span class="ticker">${e.ticker}</span><div class="name">${e.name}</div></td>
-      <td style="font-size:13px;color:var(--text-secondary);">${e.category}</td>
-      <td class="mono">${e.expense}</td>
-      <td class="mono">${e.yield}</td>
-      <td class="${e.return1y>=0?'positive':'negative'}">${e.return1y>=0?'+':''}${e.return1y.toFixed(1)}%</td>
-      <td class="${e.cagr5y>=0?'positive':'negative'}">${e.cagr5y>=0?'+':''}${e.cagr5y.toFixed(1)}%</td>
+      <td><span class="mono">${i+1}</span></td>
+      <td style="text-align:right;"><span class="ticker">${e.ticker}</span><div class="name">${e.name}</div></td>
+      <td><span style="font-size:13px;color:var(--text-secondary);">${e.category}</span></td>
+      <td><span class="mono">${e.expense}</span></td>
+      <td><span class="mono">${e.yield}</span></td>
+      <td><span class="${e.return1y>=0?'positive':'negative'}">${e.return1y>=0?'+':''}${e.return1y.toFixed(1)}%</span></td>
+      <td><span class="${e.cagr5y>=0?'positive':'negative'}">${e.cagr5y>=0?'+':''}${e.cagr5y.toFixed(1)}%</span></td>
       <td><span class="risk-badge ${rc}">${e.risk}</span></td>
     </tr>`;
   }).join('');
